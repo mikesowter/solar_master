@@ -1,0 +1,37 @@
+<VisualMicro>
+  <Program Name="solar_master" Ext=".ino" Location="E:\arduino\sketchbook\solar_master">
+    <Platform Name="arduino10x" Package="arduino" Platform="avr" Architecture="avr">
+      <Board Name="uno" Description="Arduino Uno" CoreFolder="e:\arduino\hardware\arduino\cores\arduino" VariantFullPath="e:\arduino\hardware\arduino\variants\standard" McuIdePath="e:\arduino" McuSketchBookPath="e:\Arduino" name="Arduino Uno" upload.protocol="arduino" upload.maximum_size="32256" upload.speed="115200" bootloader.low_fuses="0xff" bootloader.high_fuses="0xde" bootloader.extended_fuses="0x05" bootloader.path="optiboot" bootloader.file="optiboot_atmega328.hex" bootloader.unlock_bits="0x3F" bootloader.lock_bits="0x0F" build.mcu="atmega328p" build.f_cpu="16000000L" build.core="arduino" build.variant="standard" runtime.ide.path="e:\arduino" build.system.path="e:\arduino\hardware\arduino\system" runtime.ide.version="105" target_package="arduino" target_platform="avr" runtime.hardware.path="e:\arduino\hardware" originalid="uno" vm.platform.root.path="C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\5dyqeqrq.mjd\Micro Platforms\arduino10x" ide.hint="For use with Arduino 0023 and 1.0.x versions" ide.location.key="Arduino" ide.location.ide.winreg="Arduino 1.0.x Application" ide.location.sketchbook.winreg="Arduino 1.0.x Sketchbook" ide.location.sketchbook.preferences="sketchbook.path" ide.location.sketchbook.default="%MYDOCUMENTS%\arduino" ide.location.preferences="%VM_APPDATA_ROAMING%\arduino\preferences.txt" ide.default.package="arduino" ide.default.platform="avr" ide.multiplatform="true" ide.includes="arduino.h" ide.platformswithoutpackage="true" ide.includes.fallback="wprogram.h" ide.extension="ino" ide.extension.fallback="pde" ide.versionLTEQ="149" ide.exe="arduino.exe" ide.hosts="atmel" ide.url="http://arduino.cc/en/Main/Software" vm.debug="true" software="ARDUINO" ide.appid="arduino10x" location.sketchbook="e:\Arduino" build.core.vmresolved="e:\arduino\hardware\arduino\cores\arduino" build.core.parentfolder.vmresolved="e:\arduino\hardware\arduino\cores" build.core.coresparentfolder.vmresolved="e:\arduino\hardware\arduino" vm.core.include="arduino.h" build.board="AVR_UNO" vm.boardsource.path="e:\arduino\hardware\arduino" runtime.platform.path="e:\arduino\hardware\arduino" vm.platformname.name="avr" build.arch="AVR" build.variant.vmresolved="e:\arduino\hardware\arduino\variants\standard" vm.runtime.compiler.showwarnings="false" />
+    </Platform>
+    <Compile CompilerErrors="0" ConfigurationName="Debug" StopOnError="False" OptimiseLibs="True" OptimiseCore="True" BuildPath="C:\Users\mike\AppData\Local\V.Micro\Arduino\Builds\solar_master\uno" IsDebugStart="1" SketchName="solar_master" ReportDigitalPins="0" ReportAnalogPins="0" ReportI2C="0" ReportFreeMemory="0" IncludeDebug="1" LastDebugPreProcessorDefinitions="VM_DEBUG;VM_DEBUG_ENABLE 1;VM_DEBUG_BANDWIDTH_THROTTLE_MS 33;VM_DEBUGGER_TYPE_HARDWARESERIAL 0;VM_DEBUGGER_TYPE_SOFTWARESERIAL 1;VM_DEBUGGER_TYPE_FASTSERIAL 2;VM_DEBUGGER_TYPE_USB 3;VM_DEBUGGER_TYPE_TEENSY 4;VM_DEBUGGER_TYPE_UART 5;VM_DEBUGGER_TYPE_USART 6;VM_DEBUGGER_TYPE_USBSERIAL 7;VM_DEBUGGER_TYPE_TTYUART 8;VM_DEBUGGER_TYPE_NET_CONSOLE 9;VM_DEBUGGER_TYPE_Uart 10;VM_DEBUGGER_TYPE_COSA 11;VM_DEBUGGER_TYPE VM_DEBUGGER_TYPE_HARDWARESERIAL;VM_DEBUG_BREAKPAUSE;" IncludesDebug="1" IsCompiled="1" />
+    <Debug EnableBreak="1" DebugEnabled="1" RemotePortSpeedWrittenToDebugSource="115200" />
+    <VCCodeModel>
+      <VCCodeMacros />
+    </VCCodeModel>
+    <BreakPoints>
+      <BreakPoint Index="1" Name="solar_master.ino, line 47" Id="5d1eb7a1-61d5-4e73-897c-8a40b466e67d" Enabled="1" Message="  Millis is currently {millis()}.&#xD;&#xA;Press F5 to continue.\r\n    Press Ctrl+F5 to stop debugging or close/stop the Serial Monitor\r\n  \r\n    The code is stopped at the start of the loop() function, where you see a red dot.\r\n    The red dot is a ‘breakpoint’.\r\n    This breakpoint is automatically set by Visual Micro to demonstrate the Arduino debugger.\r\n    Add your own breakpoints by placing the cursor on any code line and pressing F9. Press F9 again to delete the breakpoint.\r\n    Read more about the Visual Micro debugger at http://www.visualmicro.com/page/Debugging-for-Arduino.aspx\r\n    Take some time to learn about debugging, it’s worth it!\r\n    To switch the demo breakpoint and other tips off, deselect Visual Micro&gt;Tutorial Mode.\r\n" MessageTextType="0" PreProcessedMessage="  Millis is currently {0}.&#xD;&#xA;Press F5 to continue.\r\n    Press Ctrl+F5 to stop debugging or close/stop the Serial Monitor\r\n  \r\n    The code is stopped at the start of the loop() function, where you see a red dot.\r\n    The red dot is a ‘breakpoint’.\r\n    This breakpoint is automatically set by Visual Micro to demonstrate the Arduino debugger.\r\n    Add your own breakpoints by placing the cursor on any code line and pressing F9. Press F9 again to delete the breakpoint.\r\n    Read more about the Visual Micro debugger at http://www.visualmicro.com/page/Debugging-for-Arduino.aspx\r\n    Take some time to learn about debugging, it’s worth it!\r\n    To switch the demo breakpoint and other tips off, deselect Visual Micro&gt;Tutorial Mode.\r\n" Condition="millis()&gt;0 || millis()&gt;1" ConditionType="1" CurrentHits="0" File="e:\arduino\sketchbook\solar_master\solar_master.ino" FileLine="47" FileColumn="1" FunctionName="" FunctionLineOffset="1" FunctionColumnOffset="1" HitCountTarget="250" HitCountType="4" Language="C++" LocationType="3" Tag="&lt;vmbp Id='56a048e7-f319-4680-a140-3b07b01740b0'/&gt;" Type="1" ToString="System.__ComObject" BreakWhenHit="1">
+        <Source>40			inStr[i++] = X;
+41		}
+42		Serial.print("   ");
+43		Serial.print(i);
+44		Serial.println(" chars");
+45	}
+46	
+--&gt;47	void loop() // run over and over
+48	{
+49	/*	while (mySerial.available())		//flush buffer
+50		{
+51			char c = mySerial.read();
+52			Serial.print(c,HEX);
+53		}
+54		Serial.println('+');		*/
+55	
+56		mySerial.write(outStr4, 11);
+</Source>
+        <MessageVariables>
+          <MessageVariable Name="millis()" Index="1" />
+        </MessageVariables>
+      </BreakPoint>
+    </BreakPoints>
+  </Program>
+</VisualMicro>
