@@ -1,5 +1,3 @@
-#include <Arduino.h>
-
 char htmlStr0[] =
 "<!DOCTYPE html>"
 "<html>"
@@ -38,7 +36,7 @@ char htmlStr4[] =
 "</html>";
 
 void handleRoot() {
-  htmlStr[0]='\0';
+/*  htmlStr[0]='\0';
   addCstring( htmlStr0 );
   addCstring( "'timeofday'" );
   addCstring( htmlStr1 );
@@ -48,39 +46,13 @@ void handleRoot() {
   addCstring( htmlStr3 );
   addErrMess();
   addCstring( htmlStr4 );
-  server.send ( 200, "text/html", htmlStr );
+  server.send ( 200, "text/html", htmlStr );  */
   //Serial.println(htmlStr);
 }
 
-void handleDay() {
+void handleMetrics() {
   htmlStr[0]='\0';
-  addCstring( htmlStr0 );
-  addCstring( "'timeofday'" );
-  addCstring( htmlStr1 );
-  add24PowerData();
-  addCstring( htmlStr2 );
-  add24TitleData();
-  addCstring( htmlStr3 );
-  addErrMess();
-  addCstring( htmlStr4 );
-  server.send ( 200, "text/html", htmlStr );
-  //Serial.println(htmlStr);
-}
-
-void handleAvg() {
-  htmlStr[0]='\0';
-  addCstring("<!DOCTYPE html><html><body><P>");
-  addAvgData();
-  addCstring( htmlStr4 );
-  server.send ( 200, "text/html", htmlStr );
-  //Serial.println(htmlStr);
-}
-
-void handleMetric() {
-  htmlStr[0]='\0';
-//  addCstring("<!DOCTYPE html><html><body>");
-//  addCstring(timeStamp());
-  addCstring("# TYPE curPower guage" );
+/*  addCstring("# TYPE curPower guage" );
   addCstring("\ncurPower ");
   addCstring(p8d(power));
   addCstring("\n# TYPE minPower guage" );
@@ -99,7 +71,7 @@ void handleMetric() {
   addCstring("\nT33Energy ");
   addCstring(p8d(T33Energy));
   addCstring( "\n" );
-  server.send ( 200, "text/plain", htmlStr );
+  server.send ( 200, "text/plain", htmlStr ); */
   //Serial.println(htmlStr);
 }
 
@@ -107,7 +79,7 @@ void handleNotFound() {
   server.uri().toCharArray(userText, 14);
   Serial.print(timeStamp());
   Serial.println(userText);
-  if (strncmp(userText,"/reset",6)==0) {
+/*  if (strncmp(userText,"/reset",6)==0) {
     errMessage("User requested restart");
     fd.close();
     fe.close();
@@ -153,11 +125,11 @@ void handleNotFound() {
     strcat(outBuf," is not a valid option");
     diagMess(outBuf);
     helpPage();
-  }
+  }  */
 }
 
 uint8_t listDiags() {
-  char line[81];
+/*  char line[81];
   htmlStr[0]='\0';
   fd.seek(0UL,SeekSet);
   while (fd.available()) {
@@ -169,5 +141,5 @@ uint8_t listDiags() {
   fd.print("length of diag list:");
   fd.println(htmlLen);
   server.send ( 200, "text/plain", htmlStr );
-  return 1;
+  return 1; */
 }

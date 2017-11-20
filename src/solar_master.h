@@ -1,4 +1,5 @@
 #include <arduino.h>
+#include <SoftwareSerial.h>
 #include <TimeLib.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
@@ -17,7 +18,7 @@ WiFiUDP udp;
 WiFiClient client,dclient;
 time_t getNtpTime();
 FSInfo fs_info;
-File fl,fd,fe;          // logs, diagnostics and errors
+File fh;          // logs, diagnostics and errors
 Ticker secondTick;
 volatile int watchDog = 0;
 
@@ -32,48 +33,29 @@ unsigned long getTime();
 unsigned long sendNTPrequest(IPAddress& address);
 unsigned long getNTPreply();
 
-//char ssid[] = "TelstraCF6EC7";
-//char pass[] = "meauff8qqwn9";
-char ssid[] = "ZombiesAteMyBrains";
-char pass[] = "iron1951";
+char ssid[] = "TelstraCF6EC7";
+char pass[] = "meauff8qqwn9";
 char d2Str[] = "12";
 char d8Str[] = "12345.78";
 
 unsigned long t0, t1, minMillis, startMillis, startSeconds, midNight;
 unsigned long importWh = 0;
-unsigned int localPort = 2390;   //  a random local port to listen for UDP packets
+unsigned int localPort = 2395;   //  a random local port to listen for UDP packets
 
 IPAddress localIP,timeServerIP,fileServerIP;
 const char* ntpServerName = "au.pool.ntp.org";
 const char* ftpServerName = "ftp.sowter.com";
-char titleData[60];
-const int HTML_SIZE = 6500;     // allows 140 char headroom at 181 cols
-char htmlStr[HTML_SIZE];        // use C strings for storage efficiency
-const int NTP_PACKET_SIZE = 48;
-const int BUFFER_SIZE = 128;
-const int ISR_CAP = 128;
-byte Buffer[BUFFER_SIZE];
-char outBuf[128];               // for ftpRcv and errMessage
-const int timeZone = 10;
-const int LDR = 14;
-const int BLU = 12;
-const int GRN = 5;
-const int RED = 4;
-const int numCols = 181;
 
-struct minStruct {
-  float lo;
-  float av;
-  float hi;
-} minData[1440];
+SoftwareSerial mySerial(10, 9); // RX, TX
 
-byte oldMin,oldHour,oldDay,oldMonth;
-int oldYear,minPtr,htmlLen;
-byte ledState;
-bool T33time;
-float power,minPower,maxPower,avgPower,minEnergy,T11Energy,T33Energy;
 
-volatile unsigned long intBuff[ISR_CAP];
-volatile byte intPtr = 0;
-volatile bool overFlow = 0;
-bool FTP_busy = false;
+uint8_t outStr1[11] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x44, 0x00, 0xFE, 0x41, 0x0A, 0x0D };			// request inverter reconnect
+uint8_t outStr2[11] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x44, 0x00, 0xFE, 0x45, 0x0A, 0x0D };			// is anybody out there?
+uint8_t outStr3[28] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x41, 0x11, 0x31, 0x35, 0x32, 0x32, 0x31, 0x33, 0x31, 0x31, 0x31,
+						0x30, 0x30, 0x30, 0x36, 0x20, 0x20, 0x20, 0x11, 0xFB, 0x3B, 0x0A, 0x0D };	// assign address 0x11
+uint8_t outStr4[11] = { 0xA5, 0xA5, 0x01, 0x11, 0x31, 0x42, 0x00, 0xFE, 0x31, 0x0A, 0x0D };			// request data from 0x11
+uint8_t inStr[60];
+uint8_t oldSec=60;
+int sampleCount;
+
+float powerMax, powerMin, powerAv;
