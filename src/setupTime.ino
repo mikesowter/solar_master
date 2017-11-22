@@ -8,12 +8,12 @@ void setupTime() {
   oldHour = hour();
   oldDay = day();
   oldMonth = month();
-  oldYear = year();
-  strcpy(outBuf,dateStamp());
-  strcat(outBuf," ");
-  strcat(outBuf,timeStamp());
-  strcat(outBuf," restart **************");
-  Serial.println(outBuf);
+
+  strcpy(charBuf,dateStamp());
+  strcat(charBuf," ");
+  strcat(charBuf,timeStamp());
+  strcat(charBuf," restart ");
+  Serial.println(charBuf);
   strcpy(todayName,"/PR");
   strcat(todayName,dateStamp());
   strcat(todayName,".csv");

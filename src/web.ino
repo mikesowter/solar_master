@@ -1,40 +1,3 @@
-char htmlStr0[] =
-"<!DOCTYPE html>"
-"<html>"
-  "<head>"
-    "<!--Load the AJAX API-->"
-    "<script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>"
-  	"<script type='text/javascript'> google.charts.load('current', {'packages':['corechart']}); google.charts.setOnLoadCallback(drawChart);"
-    " function drawChart() {"
-        "var data = new google.visualization.DataTable();"
-        "data.addColumn(";
-char htmlStr1[] =
-        ", 'Time');"
-        "data.addColumn('number', 'High');"
-        "data.addColumn('number', 'Average');"
-        "data.addColumn('number', 'Low');"
-        "data.addRows([";
-char htmlStr2[] =
-        "]);"
-        "var options = {'title':'";
-char htmlStr3[] =
-        "             ','width':1000,"
-        "              'height':700,"
-        "                colors: ['red', 'orange', 'green']};"
-        "var chart = new google.visualization.LineChart(document.getElementById('chart_div'));"
-        "chart.draw(data, options);"
-        "}"
-      "</script>"
-    "</head>"
-  "<body>"
-    "<div id='chart_div'></div>"
-    "<HR>"
-    "Recent messages:";
-char htmlStr4[] =
-    "<HR>"
-  "</body>"
-"</html>";
-
 void handleRoot() {
 /*  htmlStr[0]='\0';
   addCstring( htmlStr0 );
@@ -52,26 +15,35 @@ void handleRoot() {
 
 void handleMetrics() {
   htmlStr[0]='\0';
-/*  addCstring("# TYPE curPower guage" );
-  addCstring("\ncurPower ");
-  addCstring(p8d(power));
-  addCstring("\n# TYPE minPower guage" );
-  addCstring("\nminPower ");
-  addCstring(p8d(minData[minPtr].lo));
-  addCstring("\n# TYPE avgPower guage" );
-  addCstring("\navgPower ");
-  addCstring(p8d(minData[minPtr].av));
-  addCstring("\n# TYPE maxPower guage" );
-  addCstring("\nmaxPower ");
-  addCstring(p8d(minData[minPtr].hi));
-  addCstring("\n# TYPE T11Energy guage" );
-  addCstring("\nT11Energy ");
-  addCstring(p8d(T11Energy));
-  addCstring("\n# TYPE T33Energy guage" );
-  addCstring("\nT33Energy ");
-  addCstring(p8d(T33Energy));
+  addCstring("# TYPE pvInvTemp guage" );
+  addCstring("\npvInvTemp ");
+  addCstring(p8d(pvInvTemp));
+  addCstring("\n# TYPE pvVolts1 guage" );
+  addCstring("\npvVolts1 ");
+  addCstring(p8d(pvVolts1));
+  addCstring("\n# TYPE pvVolts2 guage" );
+  addCstring("\npvVolts2 ");
+  addCstring(p8d(pvVolts2));
+  addCstring("\n# TYPE pvAmps1 guage" );
+  addCstring("\npvAmps1 ");
+  addCstring(p8d(pvAmps1));
+  addCstring("\n# TYPE pvAmps2 guage" );
+  addCstring("\npvAmps2 ");
+  addCstring(p8d(pvAmps2));
+  addCstring("\n# TYPE pvPowerMin guage" );
+  addCstring("\npvPowerMin ");
+  addCstring(p8d(pvPowerMin));
+  addCstring("\n# TYPE pvPowerAvg guage" );
+  addCstring("\npvPowerAvg ");
+  addCstring(p8d(pvPowerAvg));
+  addCstring("\n# TYPE pvPowerMax guage" );
+  addCstring("\npvPowerMax ");
+  addCstring(p8d(pvPowerMax));
+  addCstring("\n# TYPE pvEnergyToday guage" );
+  addCstring("\npvEnergyToday ");
+  addCstring(p8d(pvEnergyToday));
   addCstring( "\n" );
-  server.send ( 200, "text/plain", htmlStr ); */
+  server.send ( 200, "text/plain", htmlStr );
   //Serial.println(htmlStr);
 }
 
@@ -142,4 +114,33 @@ uint8_t listDiags() {
   fd.println(htmlLen);
   server.send ( 200, "text/plain", htmlStr );
   return 1; */
+}
+
+void addCstring(char* s) {
+  // find end of htmlStr
+  uint16_t p;
+  for (p=0;p<HTML_SIZE;p++) {
+    if ( p>HTML_SIZE-32) {
+      diagMess("HTML_SIZE exceeded");
+      break;
+    }
+    if (htmlStr[p]=='\0') {
+      break;    // p now points to end of old string
+    }
+  }
+  uint16_t q=0;
+  for (;p<HTML_SIZE;p++) {
+    htmlStr[p]=s[q];
+    if (s[q++]=='\0') break;
+  }
+}
+
+float scaleCheck(uint16_t n) {
+  float f = (float)n/100.0;
+  if ( f == 0.0 ) {
+    return 25.0;
+  }
+  else if ( f > 40.0) return 40.0;
+  else if ( f < 0.0) return 0.0;
+  return f;
 }

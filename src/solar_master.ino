@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 1.0 20171120");
+	Serial.println("\n\rSolar Master Rev 1.0 20171122");
 	Serial.print("\n\nConnecting to ");
 	Serial.println(ssid);
 	WiFi.begin(ssid, pass);
@@ -53,78 +53,70 @@ void setup()
 
 	dateStamp();
 
-	server.on ( "/", handleRoot );
+	server.on ( "/", handleMetrics );
 	server.on ( "/metrics", handleMetrics );
 	server.onNotFound ( handleNotFound );
 	server.begin();
 	Serial.println( "HTTP server started" );
 	server.handleClient();
 
-	ThingSpeak.begin(client);
+//	ThingSpeak.begin(client);
 }
 
 void loop()
 {
 	mySerial.write(outStr4, 11);
 	delay(300);
-	int i = 0;
-	Serial.print("bytes available:");
-	Serial.println(mySerial.available());
-	while (mySerial.available()>0)
-	{
-		uint8_t X = mySerial.read();
-		printHex(X);
-		inStr[i++] = X;
-	}
-	float invTemp = (256 * inStr[7] + inStr[8]) / 10.0;
-	float pvVolts1 = (256 * inStr[9] + inStr[10]) / 10.0;
-	float pvVolts2 = (256 * inStr[11] + inStr[12]) / 10.0;
-	float pvAmps1 = (256 * inStr[13] + inStr[14]) / 10.0;
-	float pvAmps2 = (256 * inStr[15] + inStr[16]) / 10.0;
-	float pvEnergyToday = (256 * inStr[17] + inStr[18]) / 100.0;
-	float pvEnergyTotal = (256.0 * 256.0 * (float)inStr[30] + 256.0 * (float)inStr[31] + (float)inStr[32]) / 10.0;
+	int bytes=mySerial.available();
+	if (bytes>0) {
+		Serial.print("bytes available:");
+		Serial.println(mySerial.available());
+		int i = 0;
+		while (mySerial.available()>0) {
+			uint8_t X = mySerial.read();
+			printHex(X);
+			inStr[i++] = X;
+		}
+		pvInvTemp = (256 * inStr[7] + inStr[8]) / 10.0;
+		pvVolts1 = (256 * inStr[9] + inStr[10]) / 10.0;
+		pvVolts2 = (256 * inStr[11] + inStr[12]) / 10.0;
+		pvAmps1 = (256 * inStr[13] + inStr[14]) / 10.0;
+		pvAmps2 = (256 * inStr[15] + inStr[16]) / 10.0;
+		pvEnergyToday = (256 * inStr[17] + inStr[18]) / 100.0;
 
-	float pvStr1 = pvVolts1 * pvAmps1;
-	float pvStr2 = pvVolts2 * pvAmps2;
-	float dcPower = pvStr1 + pvStr2;
-	float acPower = (256 * inStr[25] + inStr[26]) / 10.0;
+		pvPower = (256 * inStr[25] + inStr[26]) / 10.0;
+	}
 
 	// check for change of minute
-	if (oldSec <= second)  //same minute
+	if (oldMin == minute())
 	{
-		oldSec = second;
-		if (acPower > powerMax) powerMax = acPower;
-		if (acPower < powerMin) powerMin = acPower;
-		powerAv += acPower;
+		if (pvPower > pvPowerMax) pvPowerMax = pvPower;
+		if (pvPower < pvPowerMin) pvPowerMin = pvPower;
+		pvPowerAvg += pvPower;
 		sampleCount++;
 	}
 	else				//new minute
 	{
-		oldSec = 0;
-		sprintf(timeStr, "%i%i:%i%i:%i%i ", hour / 10, hour % 10, minute / 10, minute % 10, second / 10, second % 10);
-		timeStr[9] = '\0';
-		Serial.print(timeStr);
-		if (sampleCount == 0) powerAv = 0;
-		else powerAv /= sampleCount;
-
-		printFloat("Temp = ", invTemp);
+		oldMin = minute();
+		if (sampleCount == 0) pvPowerAvg = 0;
+		else pvPowerAvg /= sampleCount;
+		
+		Serial.print(timeStamp());
+		printFloat("Temp = ", pvInvTemp);
 		printFloat("PV1 = ", pvVolts1);
 		printFloat("PV2 = ", pvVolts2);
 		printFloat("PA1 = ", pvAmps1);
 		printFloat("PA2 = ", pvAmps2);
-		printFloat("PW1 = ", pvStr1);
-		printFloat("PW2 = ", pvStr2);
-		printFloat("Pmin = ", powerMin);
-		printFloat("Pav = ", powerAv);
-		printFloat("Pmax = ", powerMax);
+		printFloat("Pmin = ", pvPowerMin);
+		printFloat("Pavg = ", pvPowerAvg);
+		printFloat("Pmax = ", pvPowerMax);
 		printFloat("E today = ", pvEnergyToday);
-		printFloat("E total = ", pvEnergyTotal);
-		Serial.print(sampleCount);
-		Serial.println(" samples");
+		printFloat("samples = ", sampleCount);
+		Serial.println();
 
-		powerMax = 0;
-		powerMin = 9999;
-		powerAv = 0;
+		pvPowerMax = 0;
+		pvPowerMin = 9999;
+		pvPowerAvg = 0;
 		sampleCount = 0;
 	}
 
@@ -147,22 +139,4 @@ void printFloat(char* mess,float f)
 	int j = ( f-(float)i ) * 10.0;
 	Serial.print(j);
 	Serial.print('/');
-}
-
-int bcd2bin(int temp)
-{
-	int a, b, c;
-	a = temp;
-	b = 0;
-	if (a >= 16)
-	{
-		while (a >= 16)
-		{
-			a = a - 16;
-			b = b + 10;
-			c = a + b;
-			temp = c;
-		}
-	}
-	return temp;
 }

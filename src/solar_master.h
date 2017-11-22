@@ -18,20 +18,25 @@ WiFiUDP udp;
 WiFiClient client,dclient;
 time_t getNtpTime();
 FSInfo fs_info;
-File fh;          // logs, diagnostics and errors
+File fh;
 Ticker secondTick;
 volatile int watchDog = 0;
 
+const uint8_t HTML_SIZE = 1024;
+const uint8_t NTP_PACKET_SIZE = 48;
+const uint8_t BUFFER_SIZE = 128;
+const uint8_t TIME_ZONE = 10;
 char fileName[] = "/XXyymmdd.csv";
 char todayName[] = "/XXyymmdd.csv";
 char date15Back[] = "/XXyymmdd.csv";
 char userText[] = "/XXyymmdd.csv";
 char dateStr[] = "yymmdd";
 char timeStr[] = "hh:mm:ss";
+char htmlStr[HTML_SIZE];
 char errMess[5][60];
-unsigned long getTime();
-unsigned long sendNTPrequest(IPAddress& address);
-unsigned long getNTPreply();
+uint8_t byteBuf[NTP_PACKET_SIZE];
+char charBuf[BUFFER_SIZE];
+uint8_t oldMin,oldHour,oldDay,oldMonth;
 
 char ssid[] = "TelstraCF6EC7";
 char pass[] = "meauff8qqwn9";
@@ -45,17 +50,19 @@ unsigned int localPort = 2395;   //  a random local port to listen for UDP packe
 IPAddress localIP,timeServerIP,fileServerIP;
 const char* ntpServerName = "au.pool.ntp.org";
 const char* ftpServerName = "ftp.sowter.com";
-
-SoftwareSerial mySerial(10, 9); // RX, TX
-
+bool invert = false;  												// invert logic on serial interface
+const uint8_t BUF_SIZ = 16;										// software serial buffer size
+SoftwareSerial mySerial(4,5,invert,BUF_SIZ); 	// RX=D0=IO4, TX=D1=IO5 (Wemos mini)
+// notes: gnd=1=orange, rx=2=black, tx=3=yellow
 
 uint8_t outStr1[11] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x44, 0x00, 0xFE, 0x41, 0x0A, 0x0D };			// request inverter reconnect
 uint8_t outStr2[11] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x44, 0x00, 0xFE, 0x45, 0x0A, 0x0D };			// is anybody out there?
 uint8_t outStr3[28] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x41, 0x11, 0x31, 0x35, 0x32, 0x32, 0x31, 0x33, 0x31, 0x31, 0x31,
-						0x30, 0x30, 0x30, 0x36, 0x20, 0x20, 0x20, 0x11, 0xFB, 0x3B, 0x0A, 0x0D };	// assign address 0x11
+												0x30, 0x30, 0x30, 0x36, 0x20, 0x20, 0x20, 0x11, 0xFB, 0x3B, 0x0A, 0x0D };	// assign address 0x11
 uint8_t outStr4[11] = { 0xA5, 0xA5, 0x01, 0x11, 0x31, 0x42, 0x00, 0xFE, 0x31, 0x0A, 0x0D };			// request data from 0x11
 uint8_t inStr[60];
 uint8_t oldSec=60;
 int sampleCount;
 
-float powerMax, powerMin, powerAv;
+float pvPowerMax, pvPowerMin, pvPowerAvg, pvPower;
+float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,pvEnergyToday;

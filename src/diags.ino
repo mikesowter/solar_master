@@ -1,32 +1,10 @@
 /*-------- display code ----------*/
 
-void errMessage(char* mess) {
-  strcpy(errMess[4],errMess[3]);
-  strcpy(errMess[3],errMess[2]);
-  strcpy(errMess[2],errMess[1]);
-  strcpy(errMess[1],errMess[0]);
-  strcpy(errMess[0],p2d(year()%100));
-  strcat(errMess[0],p2d(month()));
-  strcat(errMess[0],p2d(day()));
-  strcat(errMess[0]," ");
-  strcat(errMess[0],p2d(hour()));
-  strcat(errMess[0],":");
-  strcat(errMess[0],p2d(minute()));
-  strcat(errMess[0],":");
-  strcat(errMess[0],p2d(second()));
-  strcat(errMess[0]," ");
-  strcat(errMess[0],mess);
-  Serial.print(timeStamp());
-  Serial.println(errMess[0]);
-  fe.print(timeStamp());
-  fe.println(errMess[0]);
-}
-
 void diagMess(char* mess) {
   Serial.print(timeStamp());
   Serial.println(mess);
-  fd.print(timeStamp());
-  fd.println(mess);
+//  fd.print(timeStamp());
+//  fd.println(mess);
 }
 
 char* dateStamp() {
