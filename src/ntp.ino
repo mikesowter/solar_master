@@ -1,5 +1,3 @@
-#include <Arduino.h>
-
 unsigned long getTime() {
 
   unsigned long year2030 = 1893456000UL;

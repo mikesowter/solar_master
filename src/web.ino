@@ -50,54 +50,10 @@ void handleMetrics() {
 void handleNotFound() {
   server.uri().toCharArray(userText, 14);
   Serial.print(timeStamp());
-  Serial.println(userText);
-/*  if (strncmp(userText,"/reset",6)==0) {
-    errMessage("User requested restart");
-    fd.close();
-    fe.close();
-    strcpy(outBuf,"<!DOCTYPE html><html><head><HR>User requested restart<HR></head></html>");
-    server.send ( 200, "text/html", outBuf );
-    ESP.restart();
-  }
-  else if (strncmp(userText,"/diags",6)==0) {
-    listDiags();
-  }
-  else if (strncmp(userText,"/remdiags",9)==0) {
-    SPIFFS.remove("/diags.txt");
-    fd = SPIFFS.open("/diags.txt", "a+");
-    fd.println(dateStamp());
-    strcpy(outBuf,"<!DOCTYPE html><html><head><HR>Diags deleted<HR></head></html>");
-    server.send ( 200, "text/html", outBuf );
-  }
-  else if (strncmp(userText,"/filesave",9)==0) {
-    diagMess("User requested file save");
-    uploadDay();
-    uploadMonth();
-    strcpy(outBuf,"<!DOCTYPE html><html><head><HR>Safe to Shutdown<HR></head></html>");
-    server.send ( 200, "text/html", outBuf );
-  }
-  else if (SPIFFS.exists(userText)) {
-    strcpy(outBuf,"<!DOCTYPE html><html><head><HR>Sending File: \"");
-    strcat(outBuf,userText);
-    strcat(outBuf,"\"<HR></head></html>");
-    server.send ( 200, "text/html", outBuf );
-    strcpy(fileName,userText);
-    uploadFile();
-    delay(5);
-  }
-  else if (strncmp(userText,"/favicon.ico",12)==0) {
-  }
-  else if (strncmp(userText,"/apple",6)==0) {
-  }
-  else if (strncmp(userText,"/dir",4)==0) {
-    listFiles();
-  }
-  else {
-    strcpy(outBuf,userText);
-    strcat(outBuf," is not a valid option");
-    diagMess(outBuf);
-    helpPage();
-  }  */
+  Serial.print(userText);
+//if else {
+  Serial.println(" is not a valid option");
+//  }
 }
 
 uint8_t listDiags() {
@@ -133,14 +89,4 @@ void addCstring(char* s) {
     htmlStr[p]=s[q];
     if (s[q++]=='\0') break;
   }
-}
-
-float scaleCheck(uint16_t n) {
-  float f = (float)n/100.0;
-  if ( f == 0.0 ) {
-    return 25.0;
-  }
-  else if ( f > 40.0) return 40.0;
-  else if ( f < 0.0) return 0.0;
-  return f;
 }

@@ -14,7 +14,7 @@ void setupTime() {
   strcat(charBuf,timeStamp());
   strcat(charBuf," restart ");
   Serial.println(charBuf);
-  strcpy(todayName,"/PR");
+  strcpy(todayName,"/SP");
   strcat(todayName,dateStamp());
   strcat(todayName,".csv");
 }

@@ -51,7 +51,7 @@ IPAddress localIP,timeServerIP,fileServerIP;
 const char* ntpServerName = "au.pool.ntp.org";
 const char* ftpServerName = "ftp.sowter.com";
 bool invert = false;  												// invert logic on serial interface
-const uint8_t BUF_SIZ = 16;										// software serial buffer size
+const uint8_t BUF_SIZ = 128;										// software serial buffer size
 SoftwareSerial mySerial(4,5,invert,BUF_SIZ); 	// RX=D0=IO4, TX=D1=IO5 (Wemos mini)
 // notes: gnd=1=orange, rx=2=black, tx=3=yellow
 
