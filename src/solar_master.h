@@ -22,7 +22,7 @@ File fh;
 Ticker secondTick;
 volatile int watchDog = 0;
 
-const uint8_t HTML_SIZE = 1024;
+const uint16_t HTML_SIZE = 1024;
 const uint8_t NTP_PACKET_SIZE = 48;
 const uint8_t BUFFER_SIZE = 128;
 const uint8_t TIME_ZONE = 10;
@@ -36,7 +36,8 @@ char htmlStr[HTML_SIZE];
 char errMess[5][60];
 uint8_t byteBuf[NTP_PACKET_SIZE];
 char charBuf[BUFFER_SIZE];
-uint8_t oldMin,oldHour,oldDay,oldMonth;
+uint8_t oldMin,oldQtr,oldHour,oldDay,oldMonth;
+
 
 char ssid[] = "TelstraCF6EC7";
 char pass[] = "meauff8qqwn9";
@@ -61,8 +62,8 @@ uint8_t outStr3[28] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x41, 0x11, 0x31, 0x35, 0x
 												0x30, 0x30, 0x30, 0x36, 0x20, 0x20, 0x20, 0x11, 0xFB, 0x3B, 0x0A, 0x0D };	// assign address 0x11
 uint8_t outStr4[11] = { 0xA5, 0xA5, 0x01, 0x11, 0x31, 0x42, 0x00, 0xFE, 0x31, 0x0A, 0x0D };			// request data from 0x11
 uint8_t inStr[60];
-uint8_t oldSec=60;
 int sampleCount;
 
 float pvPowerMax, pvPowerMin, pvPowerAvg, pvPower;
+float qtrMax,qtrAvg,qtrMin,qtrEnergy;
 float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,pvEnergyToday;

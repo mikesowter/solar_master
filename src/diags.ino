@@ -26,9 +26,11 @@ char* timeStamp() {
   return timeStr;
 }
 
+// print byte as 2 HEX digits, then a space
 void printHex(uint8_t X) {
   if (X<16) Serial.print("0");
   Serial.print(X,HEX);
+  Serial.print(" ");
 }
 
 // convert integer into a 2 char string dd

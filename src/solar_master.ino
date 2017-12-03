@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 1.0 20171129");
+	Serial.println("\n\rSolar Master Rev 1.0 20171203");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -21,6 +21,16 @@ void setup()
 	server.begin();
 	Serial.println( "HTTP server started" );
 	server.handleClient();
+	//if(!SPIFFS.format()||!SPIFFS.begin())     //use to format SPIFFS drive
+	if(!SPIFFS.begin())
+	{
+		Serial.println("SPIFFS.begin failed");
+	}
+	SPIFFS.info(fs_info);
+	Serial.print(fs_info.totalBytes);
+	Serial.println(" bytes available");
+	Serial.print(fs_info.usedBytes);
+	Serial.println(" bytes used:");
 
 //	ThingSpeak.begin(client);
 }
@@ -40,6 +50,8 @@ void loop()
 	else minProc();
 	// reset watchdog
 	watchDog=0;
+	// check for OTA
+  ArduinoOTA.handle();
 }
 
 void printFloat(char* mess,float f)

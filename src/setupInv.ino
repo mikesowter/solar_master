@@ -7,14 +7,12 @@ void setupInv() {
   mySerial.write(outStr3,28);
   delay(500);
   int i = 0;
-  Serial.print("bytes available:");
+  Serial.print("serial bytes available:");
   Serial.println(mySerial.available());
-  {
+  while (mySerial.available()>0) {
     uint8_t X = mySerial.read();
     printHex(X);
     inStr[i++] = X;
   }
-  Serial.print("   ");
-  Serial.print(i);
-  Serial.println(" chars");
+  Serial.println();
 }

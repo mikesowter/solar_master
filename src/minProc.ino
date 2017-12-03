@@ -16,8 +16,16 @@ void minProc() {
 	printFloat("samples = ", sampleCount);
 	Serial.println();
 
-	pvPowerMax = 0;
-	pvPowerMin = 9999;
-	pvPowerAvg = 0;
-	sampleCount = 0;
+  if (pvPowerMax > qtrMax) qtrMax = pvPowerMax;
+  if (pvPowerMin < qtrMin) qtrMin = pvPowerMin;
+
+  pvPowerMax = 0.0;
+	pvPowerMin = 9999.0;
+	pvPowerAvg = 0.0;
+	sampleCount = 0.0;
+  if (oldMin/15 == oldQtr) return;
+  storeData();
+  oldQtr=oldMin/15;
+  qtrMax = 0.0;
+  qtrMin = 9999.0;
 }

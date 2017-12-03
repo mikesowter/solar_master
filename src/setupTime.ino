@@ -5,6 +5,7 @@ void setupTime() {
   startMillis = millis();
   t0 = millis();
   oldMin = minute();
+  oldQtr = oldMin/15;
   oldHour = hour();
   oldDay = day();
   oldMonth = month();
