@@ -51,8 +51,22 @@ void handleNotFound() {
   server.uri().toCharArray(userText, 14);
   Serial.print(timeStamp());
   Serial.print(userText);
-//if else {
-  Serial.println(" is not a valid option");
+
+  if (SPIFFS.exists(userText)) {
+    strcpy(charBuf,"<!DOCTYPE html><html><head><HR>Sending File: \"");
+    strcat(charBuf,userText);
+    strcat(charBuf,"\"<HR></head></html>");
+    server.send ( 200, "text/html", charBuf );
+    strcpy(fileName,userText);
+    if ( !openFile("r") ) return;
+    Serial.println(":");
+    while (fh.available()) {
+      Serial.println(fh.readStringUntil('\n'));
+      yield();
+    }
+  fh.close();
+  }
+  else Serial.println(" is not a valid option");
 //  }
 }
 

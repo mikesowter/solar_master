@@ -13,7 +13,6 @@ void setupTime() {
   strcpy(charBuf,dateStamp());
   strcat(charBuf," ");
   strcat(charBuf,timeStamp());
-  strcat(charBuf," restart ");
   Serial.println(charBuf);
   strcpy(todayName,"/SP");
   strcat(todayName,dateStamp());

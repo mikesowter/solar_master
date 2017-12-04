@@ -28,4 +28,7 @@ void minProc() {
   oldQtr=oldMin/15;
   qtrMax = 0.0;
   qtrMin = 9999.0;
+  if (oldDay == day()) return;
+  delay(30000);   //wait 30s to clear midNight reliably
+  setupTime();
 }

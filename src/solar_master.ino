@@ -16,6 +16,7 @@ void setup()
 	setupInv();
 	// setup server responses
 	server.on ( "/", handleMetrics );
+	server.on ( "/dir", handleDir );
 	server.on ( "/metrics", handleMetrics );
 	server.onNotFound ( handleNotFound );
 	server.begin();
@@ -52,6 +53,8 @@ void loop()
 	watchDog=0;
 	// check for OTA
   ArduinoOTA.handle();
+	// check for web request
+	server.handleClient();
 }
 
 void printFloat(char* mess,float f)
