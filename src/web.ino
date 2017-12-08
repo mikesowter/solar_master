@@ -30,18 +30,21 @@ void handleMetrics() {
   addCstring("\n# TYPE pvAmps2 guage" );
   addCstring("\npvAmps2 ");
   addCstring(p8d(pvAmps2));
-  addCstring("\n# TYPE pvPowerMin guage" );
-  addCstring("\npvPowerMin ");
-  addCstring(p8d(pvPowerMin));
-  addCstring("\n# TYPE pvPowerAvg guage" );
-  addCstring("\npvPowerAvg ");
-  addCstring(p8d(pvPowerAvg));
-  addCstring("\n# TYPE pvPowerMax guage" );
-  addCstring("\npvPowerMax ");
-  addCstring(p8d(pvPowerMax));
+  addCstring("\n# TYPE pvMinuteMin guage" );
+  addCstring("\npvMinuteMin ");
+  addCstring(p8d(pvMinuteMin));
+  addCstring("\n# TYPE pvMinuteAvg guage" );
+  addCstring("\npvMinuteAvg ");
+  addCstring(p8d(pvMinuteAvg));
+  addCstring("\n# TYPE pvMinuteMax guage" );
+  addCstring("\npvMinuteMax ");
+  addCstring(p8d(pvMinuteMax));
   addCstring("\n# TYPE pvEnergyToday guage" );
   addCstring("\npvEnergyToday ");
   addCstring(p8d(pvEnergyToday));
+  addCstring("\n# TYPE acVolts guage" );
+  addCstring("\nacVolts ");
+  addCstring(p8d(acVolts));
   addCstring( "\n" );
   server.send ( 200, "text/plain", htmlStr );
   //Serial.println(htmlStr);
@@ -49,8 +52,6 @@ void handleMetrics() {
 
 void handleNotFound() {
   server.uri().toCharArray(userText, 14);
-  Serial.print(timeStamp());
-  Serial.print(userText);
 
   if (SPIFFS.exists(userText)) {
     strcpy(charBuf,"<!DOCTYPE html><html><head><HR>Sending File: \"");
@@ -66,7 +67,15 @@ void handleNotFound() {
     }
   fh.close();
   }
-  else Serial.println(" is not a valid option");
+  else if (strncmp(userText,"/favicon.ico",12)==0) {
+  }
+  else if (strncmp(userText,"/apple",6)==0) {
+  }
+  else {
+    Serial.print(timeStamp());
+    Serial.print(userText);
+    Serial.println(" is not a valid option");
+  }
 //  }
 }
 

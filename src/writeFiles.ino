@@ -20,13 +20,13 @@ byte openFile(char* s) {
 }
 
 void WriteQtr() {
-  fh.print(p2d(hour()));
+  fh.print(p2d(oldHour));
   fh.print(":");
-  fh.print(p2d(minute()));
+  fh.print(p2d(oldMin));
   fh.print(",");
-  fh.print(qtrMin);
+  fh.print(pvQtrMin);
   fh.print(",");
-  fh.print(qtrMax);
+  fh.print(pvQtrMax);
   fh.print(",");
   fh.println(pvEnergyToday);
   yield();

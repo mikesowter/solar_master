@@ -3,11 +3,13 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 1.0 20171203");
+	Serial.println("\n\rSolar Master Rev 1.0 20171206");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
 	init_OTA();
+	// check for OTA
+  ArduinoOTA.handle();
 	// setup watch dog
 	secondTick.attach(1,ISRwatchDog);
 	// Set epoch and timers
@@ -43,9 +45,9 @@ void loop()
 	// check for change of minute
 	if (oldMin == minute())
 	{
-		if (pvPower > pvPowerMax) pvPowerMax = pvPower;
-		if (pvPower < pvPowerMin) pvPowerMin = pvPower;
-		pvPowerAvg += pvPower;
+		if (pvPower > pvMax) pvMax = pvPower;
+		if (pvPower < pvMin) pvMin = pvPower;
+		pvSum += pvPower;
 		sampleCount++;
 	}
 	else minProc();

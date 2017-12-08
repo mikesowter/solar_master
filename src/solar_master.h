@@ -53,7 +53,7 @@ const char* ntpServerName = "au.pool.ntp.org";
 const char* ftpServerName = "ftp.sowter.com";
 bool invert = false;  												// invert logic on serial interface
 const uint8_t BUF_SIZ = 128;										// software serial buffer size
-SoftwareSerial mySerial(4,5,invert,BUF_SIZ); 	// RX=D0=IO4, TX=D1=IO5 (Wemos mini)
+SoftwareSerial mySerial(5,4,invert,BUF_SIZ); 	// TX=D1=IO5, RX=D2=IO4 (Wemos mini)
 // notes: gnd=1=orange, rx=2=black, tx=3=yellow
 
 uint8_t outStr1[11] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x44, 0x00, 0xFE, 0x41, 0x0A, 0x0D };			// request inverter reconnect
@@ -62,8 +62,8 @@ uint8_t outStr3[28] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x41, 0x11, 0x31, 0x35, 0x
 												0x30, 0x30, 0x30, 0x36, 0x20, 0x20, 0x20, 0x11, 0xFB, 0x3B, 0x0A, 0x0D };	// assign address 0x11
 uint8_t outStr4[11] = { 0xA5, 0xA5, 0x01, 0x11, 0x31, 0x42, 0x00, 0xFE, 0x31, 0x0A, 0x0D };			// request data from 0x11
 uint8_t inStr[60];
-int sampleCount;
+int sampleCount=0;
 
-float pvPowerMax, pvPowerMin, pvPowerAvg, pvPower;
-float qtrMax,qtrAvg,qtrMin,qtrEnergy;
-float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,pvEnergyToday;
+float pvMinuteMax, pvMinuteMin, pvMinuteAvg, pvPower, pvMin, pvMax, pvSum = 0.0;
+float pvQtrMax,qtrAvg,pvQtrMin,qtrEnergy, unk1,unk2,unk3,unk4;
+float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,acVolts,acFrequency,pvEnergyToday;
