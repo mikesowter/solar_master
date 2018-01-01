@@ -15,8 +15,9 @@ void minProc() {
 	printFloat("Pavg = ", pvMinuteAvg);
 	printFloat("Pmax = ", pvMinuteMax);
 	printFloat("E today = ", pvEnergyToday);
+  printFloat("E annual = ", pvEnergyAnnual);
   printFloat("Vac = ", acVolts);
-  printFloat("Fac = ", acFrequency);
+//  printFloat("Fac = ", acFrequency);
 	printFloat("samples = ", sampleCount);
   Serial.println();
 

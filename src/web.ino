@@ -42,6 +42,9 @@ void handleMetrics() {
   addCstring("\n# TYPE pvEnergyToday guage" );
   addCstring("\npvEnergyToday ");
   addCstring(p8d(pvEnergyToday));
+  addCstring("\n# TYPE pvEnergyAnnual guage" );
+  addCstring("\npvEnergyAnnual ");
+  addCstring(p8d(pvEnergyAnnual));
   addCstring("\n# TYPE acVolts guage" );
   addCstring("\nacVolts ");
   addCstring(p8d(acVolts));

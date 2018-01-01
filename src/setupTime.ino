@@ -18,3 +18,15 @@ void setupTime() {
   strcat(todayName,dateStamp());
   strcat(todayName,".csv");
 }
+
+void watchWait(uint32_t timer) {
+  t0=millis();
+  while (millis()-t0 < timer) {  // wait for timeout
+    if (t0>millis()) t0=millis(); // check for wrap around
+    yield();
+    //  check for web requests
+    server.handleClient();
+    // check for OTA
+    ArduinoOTA.handle();
+  }
+}

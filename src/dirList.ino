@@ -45,30 +45,28 @@ uint8_t listDiags() {
 */
 void helpPage() {
   htmlStr[0]='\0';
-  addCstring("<!DOCTYPE html><html><body><HR>");
   addCstring("Valid options include:");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("8.3 filename");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("day");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("diags");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("dir");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("metrics");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("remdiags");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("remerrs");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("reset");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("shutdown");
-  addCstring("<P>");
+  addCstring("\n");
   addCstring("week");
-  addCstring("<HR>");
-  addCstring( "<HR></body></html>" );
-  server.send ( 200, "text/html", htmlStr );
+  addCstring("\n");
+  server.send ( 200, "text/plain", htmlStr );
   //Serial.println(htmlStr);
 }

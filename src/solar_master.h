@@ -66,4 +66,4 @@ int sampleCount=0;
 
 float pvMinuteMax, pvMinuteMin, pvMinuteAvg, pvPower, pvMin, pvMax, pvSum = 0.0;
 float pvQtrMax,qtrAvg,pvQtrMin,qtrEnergy, unk1,unk2,unk3,unk4;
-float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,acVolts,acFrequency,pvEnergyToday;
+float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,acVolts,acFrequency,pvEnergyToday,pvEnergyAnnual,pvETLast;
