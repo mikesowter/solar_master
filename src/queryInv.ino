@@ -16,7 +16,7 @@ void queryInv() {
   		pvAmps2 = (256 * inStr[15] + inStr[16]) / 10.0;
       pvETLast = pvEnergyToday;
   		pvEnergyToday = (256 * inStr[17] + inStr[18]) / 100.0;
-      if (pvEnergyToday < pvETLast) updateAnnual();
+      if (pvEnergyToday <= pvETLast) updateTotal();
       acVolts = (256 * inStr[21] + inStr[22]) / 10.0;
       acFrequency = (256 * inStr[23] + inStr[24]) / 100.0;
   		pvPower = (256 * inStr[25] + inStr[26]) / 10.0;

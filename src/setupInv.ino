@@ -18,6 +18,7 @@ void setupInv() {
     delay(5000);
   }
   readBytes();
+  Serial.println("\n\rInverter Configured");
 }
 
 void readBytes() {

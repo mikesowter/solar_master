@@ -16,13 +16,13 @@ extern "C" {
 ESP8266WebServer server ( 80 );
 WiFiUDP udp;
 WiFiClient client,dclient;
-time_t getNtpTime();
+time_t getNtpTime(); 
 FSInfo fs_info;
-File fh;
+File fh,fd,fe;
 Ticker secondTick;
 volatile int watchDog = 0;
 
-const uint16_t HTML_SIZE = 1024;
+const uint16_t HTML_SIZE = 10000;
 const uint8_t NTP_PACKET_SIZE = 48;
 const uint8_t BUFFER_SIZE = 128;
 const uint8_t TIME_ZONE = 10;
@@ -66,4 +66,4 @@ int sampleCount=0;
 
 float pvMinuteMax, pvMinuteMin, pvMinuteAvg, pvPower, pvMin, pvMax, pvSum = 0.0;
 float pvQtrMax,qtrAvg,pvQtrMin,qtrEnergy, unk1,unk2,unk3,unk4;
-float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,acVolts,acFrequency,pvEnergyToday,pvEnergyAnnual,pvETLast;
+float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,acVolts,acFrequency,pvEnergyToday,pvEnergyTotal,pvETLast;

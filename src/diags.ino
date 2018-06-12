@@ -1,10 +1,10 @@
 /*-------- display code ----------*/
 
 void diagMess(char* mess) {
-  Serial.print(timeStamp());
-  Serial.println(mess);
-//  fd.print(timeStamp());
-//  fd.println(mess);
+  fd.print(dateStamp());
+  fd.print(" ");
+  fd.print(timeStamp());
+  fd.println(mess);
 }
 
 char* dateStamp() {

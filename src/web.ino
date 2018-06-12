@@ -3,7 +3,7 @@ void handleRoot() {
   addCstring( htmlStr0 );
   addCstring( "'timeofday'" );
   addCstring( htmlStr1 );
-  add3PowerData();
+  add3logData();
   addCstring( htmlStr2 );
   add3TitleData();
   addCstring( htmlStr3 );
@@ -30,6 +30,9 @@ void handleMetrics() {
   addCstring("\n# TYPE pvAmps2 guage" );
   addCstring("\npvAmps2 ");
   addCstring(p8d(pvAmps2));
+  addCstring("\n# TYPE pvPower guage" );
+  addCstring("\npvPower ");
+  addCstring(p8d(pvPower));
   addCstring("\n# TYPE pvMinuteMin guage" );
   addCstring("\npvMinuteMin ");
   addCstring(p8d(pvMinuteMin));
@@ -42,9 +45,9 @@ void handleMetrics() {
   addCstring("\n# TYPE pvEnergyToday guage" );
   addCstring("\npvEnergyToday ");
   addCstring(p8d(pvEnergyToday));
-  addCstring("\n# TYPE pvEnergyAnnual guage" );
-  addCstring("\npvEnergyAnnual ");
-  addCstring(p8d(pvEnergyAnnual));
+  addCstring("\n# TYPE pvEnergyTotal guage" );
+  addCstring("\npvEnergyTotal ");
+  addCstring(p8d(pvEnergyTotal));
   addCstring("\n# TYPE acVolts guage" );
   addCstring("\nacVolts ");
   addCstring(p8d(acVolts));
@@ -57,18 +60,19 @@ void handleNotFound() {
   server.uri().toCharArray(userText, 14);
 
   if (SPIFFS.exists(userText)) {
-    strcpy(charBuf,"<!DOCTYPE html><html><head><HR>Sending File: \"");
-    strcat(charBuf,userText);
-    strcat(charBuf,"\"<HR></head></html>");
-    server.send ( 200, "text/html", charBuf );
-    strcpy(fileName,userText);
-    if ( !openFile("r") ) return;
-    Serial.println(":");
+    strcpy(htmlStr,"Sending File: ");
+    addCstring(userText);
+    addCstring("\r\r");
+    fh = SPIFFS.open(userText, "r");
+
     while (fh.available()) {
-      Serial.println(fh.readStringUntil('\n'));
+      int k=fh.readBytesUntil('\r',charBuf,80);
+      charBuf[k]='\0';
+      addCstring(charBuf);
       yield();
     }
-  fh.close();
+    fh.close();
+    server.send ( 200, "text/plain", htmlStr );
   }
   else if (strncmp(userText,"/favicon.ico",12)==0) {
   }
@@ -80,22 +84,6 @@ void handleNotFound() {
     Serial.println(" is not a valid option");
   }
 //  }
-}
-
-uint8_t listDiags() {
-/*  char line[81];
-  htmlStr[0]='\0';
-  fd.seek(0UL,SeekSet);
-  while (fd.available()) {
-    int k=fd.readBytesUntil('\r',line,80);
-    line[k]='\0';
-    addCstring(line);
-    addCstring("\n");
-  }
-  fd.print("length of diag list:");
-  fd.println(htmlLen);
-  server.send ( 200, "text/plain", htmlStr );
-  return 1; */
 }
 
 void addCstring(char* s) {

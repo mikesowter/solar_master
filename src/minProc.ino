@@ -4,8 +4,11 @@ void minProc() {
 	else pvMinuteAvg = pvSum / sampleCount;
   pvMinuteMax = pvMax;
   pvMinuteMin = pvMin;
+  // flush fault files
+  fd.flush();
+  fe.flush();
 
-	Serial.print(timeStamp());
+/*	Serial.print(timeStamp());
 	printFloat("Temp = ", pvInvTemp);
 	printFloat("PV1 = ", pvVolts1);
 	printFloat("PV2 = ", pvVolts2);
@@ -15,11 +18,10 @@ void minProc() {
 	printFloat("Pavg = ", pvMinuteAvg);
 	printFloat("Pmax = ", pvMinuteMax);
 	printFloat("E today = ", pvEnergyToday);
-  printFloat("E annual = ", pvEnergyAnnual);
   printFloat("Vac = ", acVolts);
-//  printFloat("Fac = ", acFrequency);
+  printFloat("Fac = ", acFrequency);
 	printFloat("samples = ", sampleCount);
-  Serial.println();
+  Serial.println();   */
 
   if (pvMinuteMax > pvQtrMax) pvQtrMax = pvMinuteMax;
   if (pvMinuteMin < pvQtrMin) pvQtrMin = pvMinuteMin;
@@ -35,6 +37,7 @@ void minProc() {
   pvQtrMax = 0.0;
   pvQtrMin = 9999.0;
   if (oldDay == day()) return;
-  delay(30000);   //wait 30s to clear midNight reliably
+  delay(6000);   //wait 6s to clear midNight reliably
   setupTime();
+  
 }

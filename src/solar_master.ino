@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 1.1 20171217");
+	Serial.println("\n\rSolar Master Rev 1.1 20180523");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -35,7 +35,9 @@ void setup()
 	Serial.print(fs_info.usedBytes);
 	Serial.println(" bytes used:");
 
-//	ThingSpeak.begin(client);
+	fd=SPIFFS.open("/diags.txt","a");
+  fe=SPIFFS.open("/errmess.txt","a");
+  diagMess("restart");       // restart messages
 }
 
 void loop()
