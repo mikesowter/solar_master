@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 1.1 20180523");
+	Serial.println("\n\rSolar Master Rev 1.2 20180613");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -37,7 +37,9 @@ void setup()
 
 	fd=SPIFFS.open("/diags.txt","a");
   fe=SPIFFS.open("/errmess.txt","a");
+
   diagMess("restart");       // restart messages
+	
 }
 
 void loop()
@@ -80,7 +82,8 @@ void ISRwatchDog () {
   }
   if (watchDog >= 60) {
     diagMess("watchDog 60s timeout");
-//    fh.close();
+    fd.close();
+		fe.close();
     ESP.restart();
   }
   interrupts();

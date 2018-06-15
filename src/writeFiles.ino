@@ -28,6 +28,6 @@ void WriteQtr() {
   fh.print(",");
   fh.print(pvQtrMax);
   fh.print(",");
-  fh.print(pvEnergyToday);
+  fh.println(pvEnergyToday);
   yield();
 }

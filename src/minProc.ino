@@ -8,6 +8,7 @@ void minProc() {
   fd.flush();
   fe.flush();
 
+
 /*	Serial.print(timeStamp());
 	printFloat("Temp = ", pvInvTemp);
 	printFloat("PV1 = ", pvVolts1);
@@ -31,6 +32,9 @@ void minProc() {
 	pvSum = 0.0;
 	sampleCount = 0;
   if (oldMin/15 == oldQtr) return;
+  // check for end of day
+  if (hour()>=16 && pvEnergyToday == pvETLast) updateTotal();
+  pvETLast = pvEnergyToday;
   storeData();
   oldQtr=oldMin/15;
   oldHour=hour();
@@ -39,5 +43,5 @@ void minProc() {
   if (oldDay == day()) return;
   delay(6000);   //wait 6s to clear midNight reliably
   setupTime();
-  
+  return;
 }

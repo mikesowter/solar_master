@@ -78,6 +78,13 @@ void handleNotFound() {
   }
   else if (strncmp(userText,"/apple",6)==0) {
   }
+  else if (strncmp(userText,"/deldiags",9)==0) {
+    SPIFFS.remove("/diags.txt");
+    fd = SPIFFS.open("/diags.txt", "a+");
+    fd.println(dateStamp());
+    strcpy(charBuf,"<!DOCTYPE html><html><head><HR>Diagnostics deleted<HR></head></html>");
+    server.send ( 200, "text/html", charBuf );
+  }
   else {
     Serial.print(timeStamp());
     Serial.print(userText);
