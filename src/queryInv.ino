@@ -1,5 +1,5 @@
 void queryInv() {
-  while(true) {
+  for (int j=0;j<3;j++) {
     mySerial.write(outStr4, 11);	// query inverter
     watchWait(400UL);
 
@@ -23,4 +23,7 @@ void queryInv() {
 	  }
     else readBytes();
   }
+  invReply=false;
+  watchWait(10000UL);
+  if (dayStored) setupInv();  //hold old values until day stored
 }

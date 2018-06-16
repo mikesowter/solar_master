@@ -8,22 +8,6 @@ void minProc() {
   fd.flush();
   fe.flush();
 
-
-/*	Serial.print(timeStamp());
-	printFloat("Temp = ", pvInvTemp);
-	printFloat("PV1 = ", pvVolts1);
-	printFloat("PV2 = ", pvVolts2);
-	printFloat("PA1 = ", pvAmps1);
-	printFloat("PA2 = ", pvAmps2);
-	printFloat("Pmin = ", pvMinuteMin);
-	printFloat("Pavg = ", pvMinuteAvg);
-	printFloat("Pmax = ", pvMinuteMax);
-	printFloat("E today = ", pvEnergyToday);
-  printFloat("Vac = ", acVolts);
-  printFloat("Fac = ", acFrequency);
-	printFloat("samples = ", sampleCount);
-  Serial.println();   */
-
   if (pvMinuteMax > pvQtrMax) pvQtrMax = pvMinuteMax;
   if (pvMinuteMin < pvQtrMin) pvQtrMin = pvMinuteMin;
 
@@ -43,5 +27,6 @@ void minProc() {
   if (oldDay == day()) return;
   delay(6000);   //wait 6s to clear midNight reliably
   setupTime();
+  dayStored=false;
   return;
 }

@@ -1,7 +1,6 @@
 void setupInv() {
   mySerial.begin(9600);
   while (true) {
-    delay(100);
     mySerial.write(outStr1,11);
     delay(200);
     mySerial.write(outStr2,11);
@@ -10,14 +9,11 @@ void setupInv() {
     watchWait(400UL);
 
     if (mySerial.available()==12) break;
-    // check for OTA
-    ArduinoOTA.handle();
-  	// check for web request
-  	server.handleClient();
-    delay(5000);
+    invReply=false;
+    watchWait(30000UL);
   }
   readBytes();
-  Serial.println("\n\rInverter Configured");
+  invReply=true;
 }
 
 void readBytes() {

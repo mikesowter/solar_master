@@ -1,6 +1,5 @@
 byte updateTotal() {
-  int yy,mm,dd;
-  diagMess("updateTotal entry ");
+  if (dayStored) return 0;
   fh = SPIFFS.open("/TotalNRG.csv", "a+");
   if (!fh) return 0;
   while (fh.available()>3) {
@@ -8,6 +7,7 @@ byte updateTotal() {
     if (strncmp(charBuf,dateStamp(),6)!=0) {
       pvEnergyTotal = fh.parseFloat();
     }
+    else diagMess("day already written");
   }
   pvEnergyTotal += pvEnergyToday;
   strcpy(charBuf,dateStamp());
@@ -16,5 +16,6 @@ byte updateTotal() {
   strcat(charBuf,p8d(pvEnergyTotal));
   fh.println(charBuf);
   fh.close();
+  dayStored=true;
   return 1;
 }

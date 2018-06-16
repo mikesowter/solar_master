@@ -16,7 +16,7 @@ extern "C" {
 ESP8266WebServer server ( 80 );
 WiFiUDP udp;
 WiFiClient client,dclient;
-time_t getNtpTime(); 
+time_t getNtpTime();
 FSInfo fs_info;
 File fh,fd,fe;
 Ticker secondTick;
@@ -52,7 +52,9 @@ IPAddress localIP,timeServerIP,fileServerIP;
 const char* ntpServerName = "au.pool.ntp.org";
 const char* ftpServerName = "ftp.sowter.com";
 bool invert = false;  												// invert logic on serial interface
-const uint8_t BUF_SIZ = 128;										// software serial buffer size
+bool invReply = false;												// inverter has replied
+bool dayStored = false;												// days energy stored in totalNRG.csv
+const uint8_t BUF_SIZ = 128;									// software serial buffer size
 SoftwareSerial mySerial(5,4,invert,BUF_SIZ); 	// TX=D1=IO5, RX=D2=IO4 (Wemos mini)
 // notes: gnd=1=orange, rx=2=black, tx=3=yellow
 
