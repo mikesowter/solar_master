@@ -39,7 +39,7 @@ void setup()
   fe=SPIFFS.open("/errmess.txt","a");
 
   diagMess("restart");       // restart messages
-	
+
 }
 
 void loop()

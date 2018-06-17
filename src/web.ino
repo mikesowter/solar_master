@@ -93,7 +93,7 @@ void handleNotFound() {
 //  }
 }
 
-void addCstring(char* s) {
+void addCstring(const char* s) {
   // find end of htmlStr
   uint16_t p;
   for (p=0;p<HTML_SIZE;p++) {

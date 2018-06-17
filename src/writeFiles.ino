@@ -8,7 +8,7 @@ byte storeData() {
 
 //----------------- open file for appending
 
-byte openFile(char* s) {
+byte openFile(const char* s) {
   fh = SPIFFS.open(fileName, s);
   if (!fh) {
     strcpy(charBuf,fileName);

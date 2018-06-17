@@ -1,6 +1,7 @@
 void setupInv() {
   mySerial.begin(9600);
   while (true) {
+    delay(200);
     mySerial.write(outStr1,11);
     delay(200);
     mySerial.write(outStr2,11);
@@ -10,10 +11,12 @@ void setupInv() {
 
     if (mySerial.available()==12) break;
     invReply=false;
-    watchWait(30000UL);
+    watchWait(25000UL);
+    readBytes();
   }
   readBytes();
   invReply=true;
+  watchDog=0;
 }
 
 void readBytes() {
