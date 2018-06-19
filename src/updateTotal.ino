@@ -1,18 +1,19 @@
+byte readTotal() {
+  fh = SPIFFS.open("/TotalNRG.csv", "r");
+  if (!fh) return 0;
+  while (fh.available()>1) {
+    fh.readBytes(charBuf,17);
+      thisTotal = fh.parseFloat();
+      if (thisTotal > pvEnergyTotal) pvEnergyTotal = thisTotal;
+  }
+  fh.close();
+  return 1;
+}
+
 byte updateTotal() {
   if (dayStored) return 0;
-  fh = SPIFFS.open("/TotalNRG.csv", "a+");
+  fh = SPIFFS.open("/TotalNRG.csv", "a");
   if (!fh) return 0;
-  while (fh.available()>0) {
-    fh.readBytes(charBuf,17);
-    if (strncmp(charBuf,dateStamp(),6)!=0) {
-      pvEnergyTotal = fh.parseFloat();
-    }
-    else {
-      diagMess("day already written");
-      dayStored=true;
-      return 0;
-    }
-  }
   pvEnergyTotal += pvEnergyToday;
   strcpy(charBuf,dateStamp());
   strcat(charBuf," ");

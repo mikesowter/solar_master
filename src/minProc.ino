@@ -16,14 +16,17 @@ void minProc() {
 	pvSum = 0.0;
 	sampleCount = 0;
   if (oldMin/15 == oldQtr) return;
-  // check for end of day
-  if (hour()>=16 && pvEnergyToday == pvETLast) updateTotal();
   pvETLast = pvEnergyToday;
   storeData();
   oldQtr=oldMin/15;
   oldHour=hour();
   pvQtrMax = 0.0;
   pvQtrMin = 9999.0;
+  // check for end of sun
+  if (hour()>=16 && pvEnergyToday == pvETLast) {
+    if (!updateTotal()) diagMess("updateTotal failed");
+  }
+
   if (oldDay == day()) return;
   delay(6000);   //wait 6s to clear midNight reliably
   setupTime();

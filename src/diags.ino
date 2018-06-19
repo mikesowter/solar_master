@@ -42,6 +42,11 @@ char* p2d(byte b) {
 
 // convert float into an 8 char string ddddd.dd
 char* p8d(float f) {
+  if (f > 99999.99) {
+    diagMess("p8d overflow");
+    return (char*)"99999.99";
+  }
+  if (f < 0.0) f=-f;
   int w = (int)f;
   int d = 10000;
   byte ptr = 0;
