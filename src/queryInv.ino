@@ -25,5 +25,4 @@ void queryInv() {
   }
   invReply=false;
   watchWait(10000UL);
-  if (dayStored) setupInv();  //hold old values until day stored
 }

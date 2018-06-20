@@ -3,8 +3,8 @@ byte readTotal() {
   if (!fh) return 0;
   while (fh.available()>1) {
     fh.readBytes(charBuf,17);
-      thisTotal = fh.parseFloat();
-      if (thisTotal > pvEnergyTotal) pvEnergyTotal = thisTotal;
+    thisTotal = fh.parseFloat();
+    if (thisTotal > pvEnergyTotal) pvEnergyTotal = thisTotal;
   }
   fh.close();
   return 1;

@@ -16,7 +16,6 @@ void minProc() {
 	pvSum = 0.0;
 	sampleCount = 0;
   if (oldMin/15 == oldQtr) return;
-  pvETLast = pvEnergyToday;
   storeData();
   oldQtr=oldMin/15;
   oldHour=hour();
@@ -26,7 +25,7 @@ void minProc() {
   if (hour()>=16 && pvEnergyToday == pvETLast) {
     if (!updateTotal()) diagMess("updateTotal failed");
   }
-
+  pvETLast = pvEnergyToday;
   if (oldDay == day()) return;
   delay(6000);   //wait 6s to clear midNight reliably
   setupTime();

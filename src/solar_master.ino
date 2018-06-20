@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 1.2 20180613");
+	Serial.println("\n\rSolar Master Rev 1.3 20180620");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -46,21 +46,25 @@ void loop()
 {
 	// query inverter and wait for response
 	queryInv();
-	// check for change of minute
-	if (oldMin == minute())
-	{
-		if (pvPower > pvMax) pvMax = pvPower;
-		if (pvPower < pvMin) pvMin = pvPower;
-		pvSum += pvPower;
-		sampleCount++;
+	// check for end of solar day
+	if (invReply||!dayStored) {
+		// check for change of minute
+		if (oldMin == minute())
+		{
+			if (pvPower > pvMax) pvMax = pvPower;
+			if (pvPower < pvMin) pvMin = pvPower;
+			pvSum += pvPower;
+			sampleCount++;
+		}
+		else minProc();
+		// reset watchdog
+		watchDog=0;
+		// check for OTA
+	  ArduinoOTA.handle();
+		// check for web request
+		server.handleClient();
 	}
-	else minProc();
-	// reset watchdog
-	watchDog=0;
-	// check for OTA
-  ArduinoOTA.handle();
-	// check for web request
-	server.handleClient();
+	else setupInv();
 }
 
 void printFloat(char* mess,float f)
