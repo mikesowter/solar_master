@@ -1,7 +1,7 @@
 void queryInv() {
   for (int j=0;j<3;j++) {
     mySerial.write(outStr4, 11);	// query inverter
-    watchWait(400UL);
+    watchWait(1000);
 
 	  if (mySerial.available()==59) {
       int i = 0;
@@ -21,8 +21,10 @@ void queryInv() {
   		pvPower = (256 * inStr[25] + inStr[26]) / 10.0;
       return;
 	  }
+    else if (mySerial.available()==0) {
+      zeroCount++;
+    }
     else readBytes();   // flush serial buffer
   }
   invReply=false;
-  watchWait(10000UL);
 }

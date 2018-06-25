@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 1.3 20180620");
+	Serial.println("\n\rSolar Master Rev 1.4 20180625");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -14,8 +14,6 @@ void setup()
 	secondTick.attach(1,ISRwatchDog);
 	// Set epoch and timers
 	setupTime();
-	// connect to solar inverter
-	setupInv();
 	// setup server responses
 	server.on ( "/", handleMetrics );
 	server.on ( "/dir", handleDir );
