@@ -49,6 +49,10 @@ unsigned long importWh = 0;
 unsigned int localPort = 2395;   //  a random local port to listen for UDP packets
 
 IPAddress localIP,timeServerIP,fileServerIP;
+IPAddress ip(192, 168, 1, 52);
+IPAddress gateway(192, 168, 1, 1);
+IPAddress subnet(255, 255, 255, 0);
+IPAddress dns(192, 168, 1, 1);
 const char* ntpServerName = "au.pool.ntp.org";
 const char* ftpServerName = "ftp.sowter.com";
 bool invert = false;  												// invert logic on serial interface

@@ -5,6 +5,7 @@ void queryInv() {
 
 	  if (mySerial.available()==59) {
       int i = 0;
+      invReply=true;
       while (mySerial.available()>0) {
         uint8_t X = mySerial.read();
         inStr[i++] = X;

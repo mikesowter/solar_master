@@ -1,18 +1,3 @@
-void handleRoot() {
-/*  htmlStr[0]='\0';
-  addCstring( htmlStr0 );
-  addCstring( "'timeofday'" );
-  addCstring( htmlStr1 );
-  add3logData();
-  addCstring( htmlStr2 );
-  add3TitleData();
-  addCstring( htmlStr3 );
-  addErrMess();
-  addCstring( htmlStr4 );
-  server.send ( 200, "text/html", htmlStr );  */
-  //Serial.println(htmlStr);
-}
-
 void handleMetrics() {
   htmlStr[0]='\0';
   addCstring("# TYPE pvInvTemp guage" );
@@ -51,6 +36,9 @@ void handleMetrics() {
   addCstring("\n# TYPE acVolts guage" );
   addCstring("\nacVolts ");
   addCstring(p8d(acVolts));
+  addCstring("\n# TYPE pvWifiSignal guage" );
+  addCstring("\npvWifiSignal ");
+  addCstring(p8d(-WiFi.RSSI()));
   addCstring( "\n" );
   server.send ( 200, "text/plain", htmlStr );
   //Serial.println(htmlStr);

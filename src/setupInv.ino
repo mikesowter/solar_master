@@ -1,14 +1,13 @@
 void setupInv() {
   mySerial.begin(9600);
-  invReply=false;
-  while (!invReply) {
+  while (invReply==false) {
     mySerial.write(outStr1,11);
     delay(100);
     mySerial.write(outStr2,11);
     delay(100);
-    readBytes();  // flush serial buffer
+    readBytes();  // flush serial number
     mySerial.write(outStr3,28);
-    watchWait(500);
+    watchWait(1000);
 
     if (mySerial.available()==12) {
       readBytes();  // read serial buffer
@@ -17,8 +16,9 @@ void setupInv() {
       invReply=true;
       return;
     }
+    else readBytes();  // read serial buffer
     watchDog=0;
-    watchWait(50000);
+    watchWait(30000);
   }
 }
 

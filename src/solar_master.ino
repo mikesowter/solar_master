@@ -42,6 +42,8 @@ void setup()
 
 void loop()
 {
+	// check inverter comms
+	if (invReply==false) setupInv();
 	// query inverter and wait for response
 	queryInv();
 	// check for end of solar day
@@ -62,7 +64,6 @@ void loop()
 		// check for web request
 		server.handleClient();
 	}
-	else setupInv();
 }
 
 void printFloat(char* mess,float f)
@@ -79,9 +80,6 @@ void printFloat(char* mess,float f)
 void ISRwatchDog () {
   noInterrupts();
   watchDog++;
-	if (watchDog == 30) {
-    diagMess("watchDog 30s alert");
-  }
   if (watchDog >= 60) {
     diagMess("watchDog 60s timeout");
     fd.close();

@@ -22,7 +22,7 @@ void minProc() {
   pvQtrMax = 0.0;
   pvQtrMin = 9999.0;
   // check for end of sun
-  if (hour()>=16 && pvEnergyToday == pvETLast) {
+  if (hour() >= 16 && pvEnergyToday - pvETLast < 0.01) {
     if (!updateTotal()) diagMess("updateTotal failed");
   }
   pvETLast = pvEnergyToday;
