@@ -14,9 +14,9 @@ void setupTime() {
   strcat(charBuf," ");
   strcat(charBuf,timeStamp());
   Serial.println(charBuf);
-  strcpy(todayName,"/SP");
+  strcpy(todayName,"/pv");
   strcat(todayName,dateStamp());
-  strcat(todayName,".csv"); 
+  strcat(todayName,".csv");
 }
 
 void watchWait(uint32_t timer) {

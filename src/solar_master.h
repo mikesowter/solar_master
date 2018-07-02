@@ -33,7 +33,6 @@ char userText[] = "/XXyymmdd.csv";
 char dateStr[] = "yymmdd";
 char timeStr[] = "hh:mm:ss";
 char htmlStr[HTML_SIZE];
-char errMess[5][60];
 uint8_t byteBuf[NTP_PACKET_SIZE];
 char charBuf[BUFFER_SIZE];
 uint8_t oldMin,oldQtr,oldHour,oldDay,oldMonth;

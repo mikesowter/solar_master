@@ -7,6 +7,13 @@ void diagMess(const char* mess) {
   fd.println(mess);
 }
 
+void errMess(const char* mess) {
+  fe.print(dateStamp());
+  fe.print(" ");
+  fe.print(timeStamp());
+  fe.println(mess);
+}
+
 char* dateStamp() {
   // digital display of the date
   strcpy(dateStr,p2d(year()%100));

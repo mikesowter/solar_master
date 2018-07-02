@@ -11,7 +11,7 @@ byte readTotal() {
 }
 
 byte updateTotal() {
-  if (dayStored) return 0;
+  if (dayStored) return 1;
   fh = SPIFFS.open("/TotalNRG.csv", "a");
   if (!fh) return 0;
   pvEnergyTotal += pvEnergyToday;
