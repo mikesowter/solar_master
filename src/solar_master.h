@@ -70,5 +70,6 @@ uint8_t inStr[60];
 int sampleCount=0, zeroCount=0;
 
 float pvMinuteMax, pvMinuteMin, pvMinuteAvg, pvPower, pvMin, pvMax, pvSum = 0.0;
-float pvQtrMax,pvQtrMin,qtrEnergy;
-float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,acVolts,acFrequency,pvEnergyToday,pvEnergyTotal,thisTotal,pvETLast;
+float pvQtrMax,pvQtrMin,qtrEnergy,thisTotal;
+float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,acVolts,acFrequency;
+double pvEnergyTotal,pvETLast,thisEnergyToday,prevEnergyToday=0.0,sumEnergyToday=0.0;

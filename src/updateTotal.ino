@@ -10,11 +10,21 @@ byte readTotal() {
   return 1;
 }
 
+/* This is complicated:
+1. Assume that the inverter has outages, so pvEnergyToday drops to 0 each time
+2. Assume that the interface does not have concurrent outages
+
+we need 4 variables:
+pvEnergyTotal (yesterdays reading)
+thisEnergyToday (current scan reading)
+prevEnergyToday (previous scan reading)           reset at midnight
+sumEnergyToday  (accumulated max scan readings)   reset at midnight
+*/
 byte updateTotal() {
   if (dayStored) return 1;
   fh = SPIFFS.open("/TotalNRG.csv", "a");
   if (!fh) return 0;
-  pvEnergyTotal += pvEnergyToday;
+  pvEnergyTotal += sumEnergyToday+thisEnergyToday;
   strcpy(charBuf,dateStamp());
   strcat(charBuf," ");
   strcat(charBuf,timeStamp());
