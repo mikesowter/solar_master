@@ -36,6 +36,9 @@ void handleMetrics() {
   addCstring("\n# TYPE acVolts guage" );
   addCstring("\nacVolts ");
   addCstring(p8d(acVolts));
+  addCstring("\n# TYPE acFrequency guage" );
+  addCstring("\nacFrequency ");
+  addCstring(p8d(acFrequency));
   addCstring("\n# TYPE pvWifiSignal guage" );
   addCstring("\npvWifiSignal ");
   addCstring(p8d(-WiFi.RSSI()));

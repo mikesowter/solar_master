@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 1.4 20180702");
+	Serial.println("\n\rSolar Master Rev 1.5 20180706");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -36,7 +36,9 @@ void setup()
 	fd=SPIFFS.open("/diags.txt","a");
   fe=SPIFFS.open("/errmess.txt","a");
 
-  diagMess("restart");       // restart messages
+	resetReason.toCharArray(charBuf,resetReason.length()+1);
+	diagMess(charBuf);       // restart message
+
 	if (!readTotal()) diagMess("readTotal failed");
 }
 

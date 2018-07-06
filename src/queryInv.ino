@@ -29,4 +29,13 @@ void queryInv() {
     else readBytes();   // flush serial buffer
   }
   invReply=false;
+  pvInvTemp = 0.0;
+  pvVolts1 = 0.0;
+  pvVolts2 = 0.0;
+  pvAmps1 = 0.0;
+  pvAmps2 = 0.0;
+  thisEnergyToday = 0.0;
+  acVolts = 0.0;
+  acFrequency = 50.0;
+  pvPower = 0.0;
 }

@@ -13,6 +13,7 @@ extern "C" {
 #include "user_interface.h"
 }
 
+String resetReason = ESP.getResetReason();
 ESP8266WebServer server ( 80 );
 WiFiUDP udp;
 WiFiClient client,dclient;
