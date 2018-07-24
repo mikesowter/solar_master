@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 2.0 20180720");
+	Serial.println("\n\rSolar Master Rev 2.1 20180724");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -83,7 +83,7 @@ void ISRwatchDog () {
   noInterrupts();
   watchDog++;
   if (watchDog >= 60) {
-    errMess("watchDog 60s timeout");
+    errMess("watchDog");
     fd.close();
 		fe.close();
     ESP.restart();

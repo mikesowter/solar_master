@@ -2,18 +2,19 @@
 
 void handleDir() {
   htmlStr[0]='\0';
-  addCstring("<!DOCTYPE html><html><body><HR>");
+  ltoa(fs_info.usedBytes,fileSizeStr,10);
+  addCstring(ltoa(fs_info.usedBytes,fileSizeStr,10));
+	addCstring(" bytes used:\n");
   Dir dir = SPIFFS.openDir("/");
   while (dir.next()) {
     dir.fileName().toCharArray(fileName, 14);
-    addCstring("<P>");
+    addCstring("\n");
     addCstring(fileName);
-    addCstring("&emsp;");
+    addCstring("\t");
     itoa(dir.fileSize(),fileSizeStr,10);
     addCstring(fileSizeStr);
   }
-  addCstring( "<HR></body></html>" );
-  server.send ( 200, "text/html", htmlStr );
+  server.send ( 200, "text/plain", htmlStr );
   //Serial.println(htmlStr);
 }
 
