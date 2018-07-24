@@ -1,7 +1,6 @@
 // add a web page with a listing of the SPIFFS "/" folder
 
 void handleDir() {
-  char fileSize[]="999999";
   htmlStr[0]='\0';
   addCstring("<!DOCTYPE html><html><body><HR>");
   Dir dir = SPIFFS.openDir("/");
@@ -10,39 +9,44 @@ void handleDir() {
     addCstring("<P>");
     addCstring(fileName);
     addCstring("&emsp;");
-    itoa(dir.fileSize(),fileSize,7);
-    addCstring(fileSize);
+    itoa(dir.fileSize(),fileSizeStr,10);
+    addCstring(fileSizeStr);
   }
   addCstring( "<HR></body></html>" );
   server.send ( 200, "text/html", htmlStr );
   //Serial.println(htmlStr);
 }
-/*
-uint8_t listDiags() {
-  char line[66];
-  int i,j,k;
-  const int DIAG_ROWS = 100;
-  uint32_t ptrs[DIAG_ROWS];
-  htmlStr[0]='\0';
-  addCstring("<!DOCTYPE html><html><body><HR>");
-  fd.close();
-  fd = SPIFFS.open("/diags.txt", "r");
-  i=0;
-  uint8_t numRows=0;
 
-  while (fd.available()) {
-    k=fd.readBytesUntil('\r',line,64);
-    line[k]='\0';
-    addCstring(line);
-    addCstring("<P>");
+void listFile() {
+  Dir dir = SPIFFS.openDir("/");
+  while (dir.next()) {
+    dir.fileName().toCharArray(fileName, 14);
+    if (strncmp(fileName,userText,9)==0) {
+      fileSize=dir.fileSize();
+      ltoa(fileSize,fileSizeStr,10);
+      break;
+    }
   }
-  addCstring( "<HR></body></html>" );
-  //Serial.println(htmlStr);
-  server.send ( 200, "text/html", htmlStr );
-  fd.close();
-  return 1;
+  strcpy(htmlStr,"file: ");
+  addCstring(userText);
+  addCstring(" size: ");
+  addCstring(fileSizeStr);
+  addCstring("\r\r");
+  fh = SPIFFS.open(userText, "r");
+
+  if (fileSize > HTML_SIZE) {
+    fh.seek((HTML_SIZE-100),SeekEnd);
+  }
+  while (fh.available()) {
+    int k=fh.readBytesUntil('\r',charBuf,80);
+    charBuf[k]='\0';
+    addCstring(charBuf);
+    yield();
+  }
+  fh.close();
+  server.send ( 200, "text/plain", htmlStr );
 }
-*/
+
 void helpPage() {
   htmlStr[0]='\0';
   addCstring("Valid options include:");

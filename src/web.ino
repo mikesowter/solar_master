@@ -30,6 +30,7 @@ void handleMetrics() {
   addCstring("\n# TYPE pvEnergyToday guage" );
   addCstring("\npvEnergyToday ");
   addCstring(p8d(sumEnergyToday+thisEnergyToday));
+//  addCstring(p8d(pvEnergyToday));
   addCstring("\n# TYPE pvEnergyTotal guage" );
   addCstring("\npvEnergyTotal ");
   addCstring(p8d(pvEnergyTotal));
@@ -51,29 +52,26 @@ void handleNotFound() {
   server.uri().toCharArray(userText, 14);
 
   if (SPIFFS.exists(userText)) {
-    strcpy(htmlStr,"Sending File: ");
-    addCstring(userText);
-    addCstring("\r\r");
-    fh = SPIFFS.open(userText, "r");
-
-    while (fh.available()) {
-      int k=fh.readBytesUntil('\r',charBuf,80);
-      charBuf[k]='\0';
-      addCstring(charBuf);
-      yield();
-    }
-    fh.close();
-    server.send ( 200, "text/plain", htmlStr );
+    listFile();
   }
   else if (strncmp(userText,"/favicon.ico",12)==0) {
   }
   else if (strncmp(userText,"/apple",6)==0) {
   }
   else if (strncmp(userText,"/deldiags",9)==0) {
+    fd.close();
     SPIFFS.remove("/diags.txt");
-    fd = SPIFFS.open("/diags.txt", "a+");
+    fd = SPIFFS.open("/diags.txt", "a");
     fd.println(dateStamp());
     strcpy(charBuf,"<!DOCTYPE html><html><head><HR>Diagnostics deleted<HR></head></html>");
+    server.send ( 200, "text/html", charBuf );
+  }
+  else if (strncmp(userText,"/delerrs",8)==0) {
+    fe.close();
+    SPIFFS.remove("/errmess.txt");
+    fe = SPIFFS.open("/errmess.txt", "a");
+    fe.println(dateStamp());
+    strcpy(charBuf,"<!DOCTYPE html><html><head><HR>Error Messages deleted<HR></head></html>");
     server.send ( 200, "text/html", charBuf );
   }
   else {

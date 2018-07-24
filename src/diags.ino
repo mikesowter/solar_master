@@ -40,7 +40,18 @@ void printHex(uint8_t X) {
   Serial.print(" ");
 }
 
-// convert integer into a 2 char string dd
+// convert integer into a 2 Hex string dd
+char* p2h(byte b) {
+  int hi=b/16;
+  if (hi>9) d2Str[0] = hi +'A' -10;
+  else d2Str[0] = hi +'0';
+  int lo=b%16;
+  if (lo>9) d2Str[1] = lo +'A' -10;
+  else d2Str[1] = lo +'0';
+  return d2Str;
+}
+
+// convert integer into a 2 Dec string dd
 char* p2d(byte b) {
   d2Str[0]=b/10+'0';
   d2Str[1]=b%10+'0';

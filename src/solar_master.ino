@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 1.5 20180706");
+	Serial.println("\n\rSolar Master Rev 2.0 20180720");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
