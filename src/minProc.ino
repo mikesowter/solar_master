@@ -1,7 +1,7 @@
 void minProc() {
+	if (sampleCount < 10) return;
   oldMin = minute();
-	if (sampleCount == 0) pvMinuteAvg = 0;
-	else pvMinuteAvg = pvSum / sampleCount;
+	pvMinuteAvg = pvSum / sampleCount;
   pvMinuteMax = pvMax;
   pvMinuteMin = pvMin;
   // flush fault files
@@ -16,6 +16,7 @@ void minProc() {
 	pvSum = 0.0;
 	sampleCount = 0;
   if (oldMin/15 == oldQtr) return;
+  if (pvQtrMin == 0) pvQtrMin = pvMinuteMin;
   storeData();
   oldQtr=oldMin/15;
   oldHour=hour();

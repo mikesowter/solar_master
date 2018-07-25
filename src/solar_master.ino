@@ -39,7 +39,7 @@ void setup()
 	resetReason.toCharArray(charBuf,resetReason.length()+1);
 	diagMess(charBuf);       // restart message
 
-	if (!readTotal()) diagMess("readTotal failed");
+//	if (!readTotal()) diagMess("readTotal failed");
 }
 
 void loop()

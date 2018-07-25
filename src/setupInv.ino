@@ -2,14 +2,13 @@ void setupInv() {
   mySerial.begin(9600);
   while (invReply==false) {
     mySerial.write(outStr1,11);
-    delay(100);
+    watchWait(100);
     mySerial.write(outStr1,11);
-    delay(100);
-    mySerial.write(outStr1,11);
-    delay(100);
+    watchWait(100);
     mySerial.write(outStr2,11);
-    delay(100);
+    watchWait(100);
     readBytes();  // read serial number
+    watchWait(1000);
     mySerial.write(outStr3,28);
     watchWait(1000);
 

@@ -75,9 +75,10 @@ uint8_t outStr3[28] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x41, 0x11, 0x31, 0x35, 0x
 uint8_t outStr4[11] = { 0xA5, 0xA5, 0x01, 0x01, 0x31, 0x42, 0x00, 0xFE, 0x41, 0x0A, 0x0D };			// request data from 0x01
 uint8_t inStr[256];
 uint32_t fileSize;
-uint16_t sampleCount=0, zeroCount=0;
+uint16_t sampleCount=0, zeroCount=0, twelveCount=0;
 
-float pvMinuteMax, pvMinuteMin, pvMinuteAvg, pvPower, pvMin, pvMax, pvSum = 0.0;
+float pvMax = 0.0, pvMin = 9999.0, pvSum = 0.0;
+float pvMinuteMax, pvMinuteMin, pvMinuteAvg, pvPower;
 float pvQtrMax,pvQtrMin,qtrEnergy,thisTotal,pvEnergyToday;
 float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,acVolts,acFrequency;
 double pvEnergyTotal,pvETLast,thisEnergyToday,prevEnergyToday=0.0,sumEnergyToday=0.0;

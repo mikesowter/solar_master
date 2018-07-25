@@ -14,6 +14,7 @@ void queryInv() {
   		pvInvTemp = (256 * inStr[7] + inStr[8]) / 10.0;
       thisEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
       if (thisEnergyToday<prevEnergyToday) sumEnergyToday += prevEnergyToday;
+      prevEnergyToday = thisEnergyToday;
   		pvVolts1 = (256 * inStr[11] + inStr[12]) / 10.0;
   		pvAmps1 = (256 * inStr[13] + inStr[14]) / 10.0;
       acVolts = (256 * inStr[15] + inStr[16]) / 10.0;
@@ -39,6 +40,9 @@ void queryInv() {
 	  }
     else if (mySerial.available()==0) {
       zeroCount++;
+    }
+    else if (mySerial.available()==12) {
+      twelveCount++;
     }
     else readBytes();   // flush serial buffer
   }
