@@ -56,7 +56,6 @@ void loop()
 			if (pvPower > pvMax) pvMax = pvPower;
 			if (pvPower < pvMin) pvMin = pvPower;
 			pvSum += pvPower;
-			sampleCount++;
 		}
 		else minProc();
 		// reset watchdog

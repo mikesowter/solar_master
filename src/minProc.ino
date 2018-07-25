@@ -23,10 +23,12 @@ void minProc() {
   pvQtrMax = 0.0;
   pvQtrMin = 9999.0;
   // check for end of sun
-  if (hour() >= 16 && sumEnergyToday + thisEnergyToday - pvETLast < 0.01) {
+//  if (hour() >= 16 && sumEnergyToday + thisEnergyToday - pvETLast < 0.01) {
+  if (hour() >= 16 && pvEnergyToday - pvETLast < 0.01) {
     if (!updateTotal()) diagMess("updateTotal failed");
   }
-  pvETLast = sumEnergyToday+thisEnergyToday;
+//  pvETLast = sumEnergyToday+thisEnergyToday;
+  pvETLast = pvEnergyToday;
   if (oldDay == day()) return;
   delay(6000);   //wait 6s to clear midNight reliably
   setupTime();

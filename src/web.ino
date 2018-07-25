@@ -29,8 +29,8 @@ void handleMetrics() {
   addCstring(p8d(pvMinuteMax));
   addCstring("\n# TYPE pvEnergyToday guage" );
   addCstring("\npvEnergyToday ");
-  addCstring(p8d(sumEnergyToday+thisEnergyToday));
-//  addCstring(p8d(pvEnergyToday));
+//  addCstring(p8d(sumEnergyToday+thisEnergyToday));
+  addCstring(p8d(pvEnergyToday));
   addCstring("\n# TYPE pvEnergyTotal guage" );
   addCstring("\npvEnergyTotal ");
   addCstring(p8d(pvEnergyTotal));

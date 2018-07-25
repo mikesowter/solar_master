@@ -17,6 +17,7 @@ void setupInv() {
       if (inStr[0] != 0xA5) break;
       if (inStr[1] != 0xA5) break;
       invReply=true;
+      oldMin == minute();  // necessary for min/max processing
       return;
     }
     else readBytes();  // read serial buffer
