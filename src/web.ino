@@ -34,6 +34,9 @@ void handleMetrics() {
   addCstring("\n# TYPE pvEnergyTotal guage" );
   addCstring("\npvEnergyTotal ");
   addCstring(p8d(pvEnergyTotal));
+  addCstring("\n# TYPE pvHours guage" );
+  addCstring("\npvHours ");
+  addCstring(p8d((float)pvHours));
   addCstring("\n# TYPE acVolts guage" );
   addCstring("\nacVolts ");
   addCstring(p8d(acVolts));

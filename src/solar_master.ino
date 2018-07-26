@@ -81,7 +81,7 @@ void printFloat(char* mess,float f)
 void ISRwatchDog () {
   noInterrupts();
   watchDog++;
-  if (watchDog >= 60) {
+  if (watchDog >= 600) {
     errMess("watchDog");
     fd.close();
 		fe.close();

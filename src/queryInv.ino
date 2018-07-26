@@ -15,15 +15,15 @@ void queryInv() {
 //      thisEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
 //      if (thisEnergyToday<prevEnergyToday) sumEnergyToday += prevEnergyToday;
 //      prevEnergyToday = thisEnergyToday;
-  		pvVolts1 = (256 * inStr[11] + inStr[12]) / 10.0;
-  		pvAmps1 = (256 * inStr[13] + inStr[14]) / 10.0;
+  		pvVolts1 = 0.9*pvVolts1 + (256 * inStr[11] + inStr[12]) / 100.0;
+  		pvAmps1 = 0.9*pvAmps1 + (256 * inStr[13] + inStr[14]) / 100.0;
 //      if (pvAmps1 > 20.0) pvAmps1 = 0.0;
       acVolts = (256 * inStr[15] + inStr[16]) / 10.0;
       acFrequency = (256 * inStr[17] + inStr[18]) / 100.0;
       pvPower = (256 * inStr[19] + inStr[20]) ;
       pvEnergyTotal = (256 * 256 * inStr[24] + 256 * inStr[25] + inStr[26]) / 10.0;
-      pvAmps2 = (256 * inStr[27] + inStr[28]) / 10.0;
-      pvVolts2 = inStr[21];
+      pvHours = (256 * 256 * inStr[28] + 256 * inStr[29] + inStr[30]);
+//      pvVolts2 = inStr[21];
       sampleCount++;
 
 /* old inverter
@@ -44,7 +44,7 @@ void queryInv() {
   }
   invReply = false;
   diagMess("no reply");
-  watchWait(300000UL);
+  watchWait(500000UL);
   pvInvTemp = 0.0;
   acFrequency = 50.0;
 }
