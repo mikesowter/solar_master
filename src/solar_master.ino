@@ -3,7 +3,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 2.1 20180724");
+	Serial.println("\n\rSolar Master Rev 2.2 20180726");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -65,17 +65,6 @@ void loop()
 		// check for web request
 		server.handleClient();
 	}
-}
-
-void printFloat(char* mess,float f)
-{
-	Serial.print(mess);
-	long i = f;
-	Serial.print(i);
-	Serial.print('.');
-	int j = ( f-(float)i ) * 10.0;
-	Serial.print(j);
-	Serial.print('/');
 }
 
 void ISRwatchDog () {

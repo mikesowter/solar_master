@@ -17,13 +17,20 @@ void queryInv() {
 //      prevEnergyToday = thisEnergyToday;
   		pvVolts1 = 0.9*pvVolts1 + (256 * inStr[11] + inStr[12]) / 100.0;
   		pvAmps1 = 0.9*pvAmps1 + (256 * inStr[13] + inStr[14]) / 100.0;
-//      if (pvAmps1 > 20.0) pvAmps1 = 0.0;
       acVolts = (256 * inStr[15] + inStr[16]) / 10.0;
       acFrequency = (256 * inStr[17] + inStr[18]) / 100.0;
       pvPower = (256 * inStr[19] + inStr[20]) ;
-      pvEnergyTotal = (256 * 256 * inStr[24] + 256 * inStr[25] + inStr[26]) / 10.0;
-      pvHours = (256 * 256 * inStr[28] + 256 * inStr[29] + inStr[30]);
-//      pvVolts2 = inStr[21];
+      pvEnergyTotal = (256.0 * 256.0 * (double)inStr[24] + 256.0 * (double)inStr[25] + (double)inStr[26]) / 10.0;
+      pvHours = (256 * inStr[29] + inStr[30]);
+      pvFault = inStr[32];
+      if (pvFault != 1 || pvFault != prevFault) {
+        strcpy(charBuf,"Inverter Fault: ");
+        strcat(charBuf,p2d(pvFault));
+        errMess(charBuf);
+        prevFault = pvFault;
+//        scanFault();
+      }
+      else prevFault = 1;
       sampleCount++;
 
 /* old inverter
@@ -44,7 +51,7 @@ void queryInv() {
   }
   invReply = false;
   diagMess("no reply");
-  watchWait(500000UL);
+  watchWait(500000UL);    // wait 500s to avoid sporadic comms errors
   pvInvTemp = 0.0;
   acFrequency = 50.0;
 }

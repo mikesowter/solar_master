@@ -3,34 +3,27 @@ void setupInv() {
   while (invReply==false) {
     mySerial.write(outStr1,11);
     watchWait(100);
-    mySerial.write(outStr1,11);
-    watchWait(100);
     mySerial.write(outStr2,11);
     watchWait(100);
-    readBytes();  // read serial number
+    readBytes();                      // read serial number
     watchWait(1000);
-    mySerial.write(outStr3,28);
+    mySerial.write(outStr3,28);       // assign address
     watchWait(1000);
 
-    if (mySerial.available()>10) {
-      readBytes();  // read serial buffer
-      if (inStr[0] != 0xA5) break;
-      if (inStr[1] != 0xA5) break;
-      invReply=true;
-      oldMin == minute();  // necessary for min/max processing
+    if (mySerial.available()==12) {
+      readBytes();                    // read acknowledgement
+      if (badCheckSum(10)) break;
+      invReply = true;
+      oldMin == minute();  // necessary for first min/max processing
       return;
     }
-    else readBytes();  // read serial buffer
-    watchDog=0;
+    while (mySerial.available()>0) mySerial.read();  // flush buffer
+    watchDog = 0;
     watchWait(10000);
   }
 }
 
 void readBytes() {
-  if (mySerial.available()==0) {
-    Serial.print("0");
-    return;
-  }
   int i = 0;
   htmlStr[0]='\0';
   while (mySerial.available()>0) {
@@ -39,6 +32,7 @@ void readBytes() {
     addCstring(" ");
     inStr[i++] = X;
   }
+  if ( i==0 || inStr[0]==0xFF ) return;
   diagMess(htmlStr);
   fd.flush();
 }
