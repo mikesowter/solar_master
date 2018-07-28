@@ -1,61 +1,43 @@
-#include <solar_master.h>
+#include <main.h>
 
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 2.2 20180726");
+	Serial.println("\n\rSolar Master Rev 2.3 20180728");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
 	init_OTA();
-	// check for OTA
-  ArduinoOTA.handle();
 	// setup watch dog
 	secondTick.attach(1,ISRwatchDog);
 	// Set epoch and timers
 	setupTime();
 	// setup server responses
-	server.on ( "/", handleMetrics );
-	server.on ( "/dir", handleDir );
-	server.on ( "/metrics", handleMetrics );
-	server.onNotFound ( handleNotFound );
-	server.begin();
-	Serial.println( "HTTP server started" );
-	server.handleClient();
-	//if(!SPIFFS.format()||!SPIFFS.begin())     //use to format SPIFFS drive
-	if(!SPIFFS.begin())
-	{
-		Serial.println("SPIFFS.begin failed");
-	}
-	SPIFFS.info(fs_info);
-	Serial.print(fs_info.totalBytes);
-	Serial.println(" bytes available");
-	Serial.print(fs_info.usedBytes);
-	Serial.println(" bytes used:");
-
-	fd=SPIFFS.open("/diags.txt","a");
-  fe=SPIFFS.open("/errmess.txt","a");
-
+	setupServer();
+	// setup file system and diag files
+	setupSPIFFS();
+	// lookup reason for restart
 	resetReason.toCharArray(charBuf,resetReason.length()+1);
 	diagMess(charBuf);       // restart message
-
-//	if (!readTotal()) diagMess("readTotal failed");
+	// read yesterday's TotalEnergy
+	if (!readTotal()) diagMess("readTotal failed");
 }
 
 void loop()
 {
 	// check inverter comms
-	if (invReply==false) setupInv();
+	if ( invReply==false ) setupInv();
 	// query inverter and wait for response
 	queryInv();
 	// check for end of solar day
-	if (invReply||!dayStored) {
+	if ( invReply || !dayStored ) {
 		// check for change of minute
-		if (oldMin == minute())
+		if ( oldMin==minute() || firstPass )
 		{
 			if (pvPower > pvMax) pvMax = pvPower;
 			if (pvPower < pvMin) pvMin = pvPower;
 			pvSum += pvPower;
+			firstPass = false;
 		}
 		else minProc();
 		// reset watchdog

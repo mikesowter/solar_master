@@ -58,6 +58,7 @@ const char* ntpServerName = "au.pool.ntp.org";
 const char* ftpServerName = "ftp.sowter.com";
 bool invert = false;  												// invert logic on serial interface
 bool invReply = false;												// inverter has replied
+bool firstPass = true;												// reset after inverter first replies
 bool dayStored = false;												// days energy stored in totalNRG.csv
 const uint8_t BUF_SIZ = 128;									// software serial buffer size
 SoftwareSerial mySerial(5,4,invert,BUF_SIZ); 	// TX=D1=IO5, RX=D2=IO4 (Wemos mini)

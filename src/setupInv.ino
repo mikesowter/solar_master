@@ -14,7 +14,7 @@ void setupInv() {
       readBytes();                    // read acknowledgement
       if (badCheckSum(10)) break;
       invReply = true;
-      oldMin == minute();  // necessary for first min/max processing
+      firstPass = true;       // necessary for first min/max processing
       return;
     }
     while (mySerial.available()>0) mySerial.read();  // flush buffer
