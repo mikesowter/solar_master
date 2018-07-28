@@ -11,16 +11,16 @@ void queryInv() {
       if (badCheckSum(51)) break;
       invReply=true;
   		pvInvTemp = (256 * inStr[7] + inStr[8]) / 10.0;
-      pvEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
-//      thisEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
-//      if (thisEnergyToday<prevEnergyToday) sumEnergyToday += prevEnergyToday;
-//      prevEnergyToday = thisEnergyToday;
+//      pvEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
+      thisEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
+      if (thisEnergyToday<prevEnergyToday) sumEnergyToday += prevEnergyToday;
+      prevEnergyToday = thisEnergyToday;
   		pvVolts1 = 0.9*pvVolts1 + (256 * inStr[11] + inStr[12]) / 100.0;
   		pvAmps1 = 0.9*pvAmps1 + (256 * inStr[13] + inStr[14]) / 100.0;
       acVolts = (256 * inStr[15] + inStr[16]) / 10.0;
       acFrequency = (256 * inStr[17] + inStr[18]) / 100.0;
       pvPower = (256 * inStr[19] + inStr[20]) ;
-      pvEnergyTotal = (256.0 * 256.0 * (double)inStr[24] + 256.0 * (double)inStr[25] + (double)inStr[26]) / 10.0;
+//      pvEnergyTotal = (256.0 * 256.0 * (double)inStr[24] + 256.0 * (double)inStr[25] + (double)inStr[26]) / 10.0;
       pvHours = (256 * inStr[29] + inStr[30]);
       pvFault = inStr[32];
       if (pvFault != 1 || pvFault != prevFault) {

@@ -37,7 +37,10 @@ void loop()
 			if (pvPower > pvMax) pvMax = pvPower;
 			if (pvPower < pvMin) pvMin = pvPower;
 			pvSum += pvPower;
-			firstPass = false;
+			if (firstPass) {
+				pvMin = pvPower;
+				firstPass = false;
+			}
 		}
 		else minProc();
 		// reset watchdog
