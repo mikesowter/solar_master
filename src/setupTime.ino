@@ -30,3 +30,13 @@ void watchWait(uint32_t timer) {
     ArduinoOTA.handle();
   }
 }
+
+void dayCheck() {
+  if (oldDay == day()) return;
+  delay(6000);   //wait 6s to clear midNight reliably
+  setupTime();
+  dayStored = false;
+  prevEnergyToday = 0.0;
+  sumEnergyToday = 0.0;
+  return;
+}

@@ -28,12 +28,6 @@ void minProc() {
     if (!updateTotal()) diagMess("updateTotal failed");
   }
   pvETLast = sumEnergyToday + thisEnergyToday;
-//  pvETLast = pvEnergyToday;
-  if (oldDay == day()) return;
-  delay(6000);   //wait 6s to clear midNight reliably
-  setupTime();
-  dayStored = false;
-  prevEnergyToday = 0.0;
-  sumEnergyToday = 0.0;
+  //  pvETLast = pvEnergyToday;
   return;
 }

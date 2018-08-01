@@ -8,7 +8,10 @@ void queryInv() {
       while (mySerial.available()>0) {
         inStr[i++] = mySerial.read();
       }
-      if (badCheckSum(51)) break;
+      if (badCheckSum(51)) {
+        readBytes(true);
+        break;
+      }
       invReply=true;
   		pvInvTemp = (256 * inStr[7] + inStr[8]) / 10.0;
 //      pvEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
@@ -23,7 +26,7 @@ void queryInv() {
 //      pvEnergyTotal = (256.0 * 256.0 * (double)inStr[24] + 256.0 * (double)inStr[25] + (double)inStr[26]) / 10.0;
       pvHours = (256 * inStr[29] + inStr[30]);
       pvFault = inStr[32];
-      if (pvFault != 1 || pvFault != prevFault) {
+      if ( pvFault > 1 && pvFault != prevFault ) {
         strcpy(charBuf,"Inverter Fault: ");
         strcat(charBuf,p2d(pvFault));
         errMess(charBuf);
