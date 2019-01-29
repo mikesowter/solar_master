@@ -13,8 +13,10 @@ byte readTotal() {
     fh.readBytes(charBuf,9);
     thisTotal = (double)fh.parseFloat();
     while ( fh.read()!='\r' );        // remove "\n\r" from end of line
-    fh.read();                      // ????
-    if (thisTotal > pvEnergyTotal) pvEnergyTotal = thisTotal;
+    fh.read();                        // ????
+    if (thisTotal > pvEnergyTotal) {
+      pvEnergyTotal = thisTotal;
+    }
   }
   fh.close();
   return 1;
@@ -36,8 +38,9 @@ byte updateTotal() {
   if (!fh) return 0;
   pvEnergyTotal += sumEnergyToday+thisEnergyToday;
   strcpy(charBuf,dateStamp());
-  strcat(charBuf," ");
+  strcat(charBuf,",");
   strcat(charBuf,timeStamp());
+  strcat(charBuf,",");
   strcat(charBuf,p8d(pvEnergyTotal));
   fh.println(charBuf);
   fh.close();

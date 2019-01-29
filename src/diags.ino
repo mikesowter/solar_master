@@ -16,19 +16,19 @@ void errMess(const char* mess) {
 
 char* dateStamp() {
   // digital display of the date
-  strcpy(dateStr,p2d(year()%100));
-  strcat(dateStr,p2d(month()));
-  strcat(dateStr,p2d(day()));
+  strcpy(dateStr,i2sd(year()%100));
+  strcat(dateStr,i2sd(month()));
+  strcat(dateStr,i2sd(day()));
   return dateStr;
 }
 
 char* timeStamp() {
   // digital display of the time
-  strcpy(timeStr,p2d(hour()));
+  strcpy(timeStr,i2sd(hour()));
   strcat(timeStr,":");
-  strcat(timeStr,p2d(minute()));
+  strcat(timeStr,i2sd(minute()));
   strcat(timeStr,":");
-  strcat(timeStr,p2d(second()));
+  strcat(timeStr,i2sd(second()));
   strcat(timeStr," ");
   return timeStr;
 }
@@ -41,7 +41,7 @@ void printHex(uint8_t X) {
 }
 
 // convert integer into a 2 Hex string dd
-char* p2h(byte b) {
+char* i2sh(uint8_t b) {
   int hi=b/16;
   if (hi>9) d2Str[0] = hi +'A' -10;
   else d2Str[0] = hi +'0';
@@ -52,7 +52,7 @@ char* p2h(byte b) {
 }
 
 // convert integer into a 2 Dec string dd
-char* p2d(byte b) {
+char* i2sd(byte b) {
   d2Str[0]=b/10+'0';
   d2Str[1]=b%10+'0';
   return d2Str;

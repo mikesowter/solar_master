@@ -20,9 +20,9 @@ byte openFile(const char* s) {
 }
 
 void WriteQtr() {
-  fh.print(p2d(hour()));
+  fh.print(i2sd(hour()));
   fh.print(":");
-  fh.print(p2d(minute()));
+  fh.print(i2sd(minute()));
   fh.print(",");
   fh.print(pvQtrMin);
   fh.print(",");

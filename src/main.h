@@ -1,9 +1,11 @@
 #include <arduino.h>
+#include "secrets.h"
 #include <SoftwareSerial.h>
 #include <TimeLib.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
+#include <ESP8266FtpServer.h>
 #include <WiFiUdp.h>
 #include <fs.h>
 #include <ESP8266mDNS.h>
@@ -18,7 +20,6 @@ const uint8_t NTP_PACKET_SIZE = 48;
 const uint8_t BUFFER_SIZE = 128;
 const uint8_t TIME_ZONE = 10;
 const char* ntpServerName = "au.pool.ntp.org";
-const char* ftpServerName = "ftp.sowter.com";
 const uint8_t SS_BUFFER = 128;									// software serial buffer size
 const uint8_t outStr1[11] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x44, 0x00, 0xFE, 0x41, 0x0A, 0x0D };			// request inverter disconnect
 const uint8_t outStr2[11] = { 0xA5, 0xA5, 0x01, 0x00, 0x30, 0x40, 0x00, 0xFE, 0x45, 0x0A, 0x0D };			// is anybody out there?
@@ -34,6 +35,7 @@ const uint8_t outStr4[11] = { 0xA5, 0xA5, 0x01, 0x01, 0x31, 0x42, 0x00, 0xFE, 0x
 String resetReason = ESP.getResetReason();
 SoftwareSerial mySerial(5,4,false,SS_BUFFER); 	// TX=D1=IO5, RX=D2=IO4 (Wemos mini)
 ESP8266WebServer server ( 80 );
+FtpServer ftpSrv;
 WiFiUDP udp;
 WiFiClient client,dclient;
 time_t getNtpTime();
@@ -62,8 +64,6 @@ char dateStr[] = "yymmdd";
 char timeStr[] = "hh:mm:ss";
 char htmlStr[HTML_SIZE];
 char charBuf[BUFFER_SIZE];
-char ssid[] = "TelstraCF6EC7";
-char pass[] = "meauff8qqwn9";
 char d2Str[] = "12";
 char d8Str[] = "12345.78";
 
@@ -76,9 +76,9 @@ float pvInvTemp,pvVolts1,pvVolts2,pvAmps1,pvAmps2,acVolts,acFrequency;
 
 uint8_t byteBuf[NTP_PACKET_SIZE];
 uint8_t oldMin,oldQtr,oldHour,oldDay,oldMonth;
-uint8_t inStr[256], pvFault, prevFault=1;
-uint16_t sampleCount=0, zeroCount=0, twelveCount=0;
-uint32_t fileSize, pvHours;
-uint32_t t0, t1, minMillis, startMillis, startSeconds, midNight;
+uint8_t inStr[128],pvFault, prevFault=1;
+int16_t sampleCount=0, timeSlipSecs;
+uint32_t fileSize, pvHours, secsSinceRestart;
+uint32_t t0, t1, minMillis, startMillis, startSeconds, midNight, lastScan;
 uint32_t importWh = 0;
 uint32_t localPort = 2395;   //  a random local port to listen for UDP packets

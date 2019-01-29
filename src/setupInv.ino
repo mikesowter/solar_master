@@ -1,6 +1,8 @@
 void setupInv() {
+  ESP.wdtDisable();
   mySerial.begin(9600);
   while (invReply==false) {
+    ESP.wdtFeed();
     mySerial.write(outStr1,11);
     watchWait(100);
     mySerial.write(outStr2,11);
@@ -12,18 +14,19 @@ void setupInv() {
 
     if (mySerial.available()==12) {
       readBytes(false);                    // read acknowledgement
-      if (badCheckSum(10)) {
-        readBytes(true);
-        break;
+      if (goodCheckSum(10)) {
+        invReply = true;
+        firstPass = true;             // necessary for first min/max processing
+        ESP.wdtEnable(5000UL);
+        return;
       }
-      invReply = true;
-      firstPass = true;       // necessary for first min/max processing
-      return;
     }
-    while (mySerial.available()>0) mySerial.read();  // flush buffer
-    watchDog = 0;
+    while (mySerial.available()>0) {   // flush buffer
+      mySerial.read();
+      yield();
+    }
     dayCheck();
-    watchWait(10000);
+    watchDog = 0;
   }
 }
 
@@ -32,7 +35,7 @@ void readBytes(bool HexOut) {
   htmlStr[0]='\0';
   while (mySerial.available()>0) {
     uint8_t X = mySerial.read();
-    addCstring(p2h(X));
+    addCstring(i2sh(X));
     addCstring(" ");
     inStr[i++] = X;
   }

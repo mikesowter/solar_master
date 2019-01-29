@@ -4,37 +4,32 @@ void queryInv() {
     watchWait(1000);
 
 	  if (mySerial.available()==53) {
-      int i = 0;
-      while (mySerial.available()>0) {
-        inStr[i++] = mySerial.read();
+      readBytes(false);
+      if (goodCheckSum(51)) {
+        invReply = true;
+    		pvInvTemp = (256 * inStr[7] + inStr[8]) / 10.0;
+  //      pvEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
+        thisEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
+        if (thisEnergyToday<prevEnergyToday) sumEnergyToday += prevEnergyToday;
+        prevEnergyToday = thisEnergyToday;
+    		pvVolts1 = 0.9*pvVolts1 + (256 * inStr[11] + inStr[12]) / 100.0;
+    		pvAmps1 = 0.9*pvAmps1 + (256 * inStr[13] + inStr[14]) / 100.0;
+        acVolts = (256 * inStr[15] + inStr[16]) / 10.0;
+        acFrequency = (256 * inStr[17] + inStr[18]) / 100.0;
+        pvPower = (256 * inStr[19] + inStr[20]) ;
+  //      pvEnergyTotal = (256.0 * 256.0 * (double)inStr[24] + 256.0 * (double)inStr[25] + (double)inStr[26]) / 10.0;
+        pvHours = (256 * inStr[29] + inStr[30]);
+        pvFault = inStr[32];
+        if ( pvFault > 1 && pvFault != prevFault ) {
+          strcpy(charBuf,"Inverter Fault: ");
+          strcat(charBuf,i2sd(pvFault));
+          errMess(charBuf);
+          prevFault = pvFault;
+        }
+        else prevFault = 1;
       }
-      if (badCheckSum(51)) {
-        readBytes(true);
-        break;
-      }
-      invReply=true;
-  		pvInvTemp = (256 * inStr[7] + inStr[8]) / 10.0;
-//      pvEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
-      thisEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
-      if (thisEnergyToday<prevEnergyToday) sumEnergyToday += prevEnergyToday;
-      prevEnergyToday = thisEnergyToday;
-  		pvVolts1 = 0.9*pvVolts1 + (256 * inStr[11] + inStr[12]) / 100.0;
-  		pvAmps1 = 0.9*pvAmps1 + (256 * inStr[13] + inStr[14]) / 100.0;
-      acVolts = (256 * inStr[15] + inStr[16]) / 10.0;
-      acFrequency = (256 * inStr[17] + inStr[18]) / 100.0;
-      pvPower = (256 * inStr[19] + inStr[20]) ;
-//      pvEnergyTotal = (256.0 * 256.0 * (double)inStr[24] + 256.0 * (double)inStr[25] + (double)inStr[26]) / 10.0;
-      pvHours = (256 * inStr[29] + inStr[30]);
-      pvFault = inStr[32];
-      if ( pvFault > 1 && pvFault != prevFault ) {
-        strcpy(charBuf,"Inverter Fault: ");
-        strcat(charBuf,p2d(pvFault));
-        errMess(charBuf);
-        prevFault = pvFault;
-//        scanFault();
-      }
-      else prevFault = 1;
       sampleCount++;
+      return;
 
 /* old inverter
       pvInvTemp = (256 * inStr[7] + inStr[8]) / 10.0;
@@ -47,20 +42,32 @@ void queryInv() {
       prevEnergyToday = thisEnergyToday;
       acVolts = (256 * inStr[21] + inStr[22]) / 10.0;
       acFrequency = (256 * inStr[23] + inStr[24]) / 100.0;
-  		pvPower = (256 * inStr[25] + inStr[26]) / 10.0;   */
-      return;
+  		pvPower = (256 * inStr[25] + inStr[26]) / 10.0;
+      return;   */
 	  }
-    else while (mySerial.available()>0) mySerial.read();  // flush buffer
+    else while (mySerial.available()>0) {   // flush buffer
+      mySerial.read();
+      yield();
+    }
   }
   invReply = false;
   diagMess("no reply");
-  watchWait(500000UL);    // wait 500s to avoid sporadic comms errors
+  if ( hour()>=16 && !dayStored ) {
+    if (!updateTotal()) diagMess("updateTotal failed");
+    else dayStored = true;
+  }
+  for (int i=0;i<10;i++) {    // wait 5 minutes before trying to reconnect
+    watchDog = 0;
+    watchWait(30000);
+  }
   pvInvTemp = 0.0;
   acFrequency = 50.0;
 }
 
-bool badCheckSum(uint8_t len) {
+bool goodCheckSum(uint8_t len) {
   uint16_t sum = 0;
-  for (int i=0;i<len;i++) sum += inStr[i];
+  for (int i=0;i<len-2;i++) sum += inStr[i];
+  sum += inStr[len-2]*256;
+  sum += inStr[len-1];
   return sum == 0;
 }

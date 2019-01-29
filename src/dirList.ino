@@ -62,7 +62,7 @@ void helpPage() {
   addCstring("\n");
   addCstring("metrics");
   addCstring("\n");
-  addCstring("remdiags");
+  addCstring("deldiags");
   addCstring("\n");
   addCstring("remerrs");
   addCstring("\n");

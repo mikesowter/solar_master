@@ -48,7 +48,7 @@ void handleMetrics() {
   addCstring(p8d(-WiFi.RSSI()));
   addCstring( "\n" );
   server.send ( 200, "text/plain", htmlStr );
-  //Serial.println(htmlStr);
+  lastScan = millis();
 }
 
 void handleNotFound() {
@@ -65,7 +65,7 @@ void handleNotFound() {
     fd.close();
     SPIFFS.remove("/diags.txt");
     fd = SPIFFS.open("/diags.txt", "a");
-    fd.println(dateStamp());
+    diagMess("diags deleted");
     strcpy(charBuf,"<!DOCTYPE html><html><head><HR>Diagnostics deleted<HR></head></html>");
     server.send ( 200, "text/html", charBuf );
   }

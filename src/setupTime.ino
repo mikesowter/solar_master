@@ -20,7 +20,7 @@ void setupTime() {
 }
 
 void watchWait(uint32_t timer) {
-  t0=millis();
+  t0 = millis();
   while (millis()-t0 < timer) {  // wait for timeout
     if (t0>millis()) t0=millis(); // check for wrap around
     yield();
@@ -28,13 +28,21 @@ void watchWait(uint32_t timer) {
     server.handleClient();
     // check for OTA
     ArduinoOTA.handle();
+    // check for FTP request
+		ftpSrv.handleFTP();
   }
 }
 
 void dayCheck() {
   if (oldDay == day()) return;
   delay(6000);   //wait 6s to clear midNight reliably
+  secsSinceRestart = now()-startSeconds;
+  midNight = now();
   setupTime();
+  t1 = millis()-t0;     // ms taken to chat with NTP server
+  timeSlipSecs = now()-midNight-t1/1000;
+  sprintf(charBuf,"%d seconds drift in %d \n",timeSlipSecs,secsSinceRestart);
+  diagMess(charBuf);
   dayStored = false;
   prevEnergyToday = 0.0;
   sumEnergyToday = 0.0;
