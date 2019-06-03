@@ -35,14 +35,14 @@ void watchWait(uint32_t timer) {
 
 void dayCheck() {
   if (oldDay == day()) return;
-  delay(6000);   //wait 6s to clear midNight reliably
-  secsSinceRestart = now()-startSeconds;
-  midNight = now();
+  delay(2000);   //wait 2s to clear midNight reliably
+//  secsSinceRestart = now()-startSeconds;
+//  midNight = now();
   setupTime();
-  t1 = millis()-t0;     // ms taken to chat with NTP server
-  timeSlipSecs = now()-midNight-t1/1000;
-  sprintf(charBuf,"%d seconds drift in %d \n",timeSlipSecs,secsSinceRestart);
-  diagMess(charBuf);
+//  t1 = millis()-t0;     // ms taken to chat with NTP server
+//  timeSlipSecs = now()-midNight-t1/1000;
+//  sprintf(charBuf,"%d seconds drift in %d \n",timeSlipSecs,secsSinceRestart);
+//  diagMess(charBuf);
   dayStored = false;
   prevEnergyToday = 0.0;
   sumEnergyToday = 0.0;

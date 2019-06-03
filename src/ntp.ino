@@ -3,16 +3,29 @@ unsigned long getTime() {
   unsigned long year2030 = 1893456000UL;
   unsigned long year2017 = 1483207200UL;
 
-  while(1) {
-    while (udp.parsePacket()!= NTP_PACKET_SIZE) {
-      sendNTPrequest(timeServerIP);
-      delay(1000);
-    }
-    startSeconds = getNTPreply();
-    yield();
-    if (startSeconds > year2017 && startSeconds < year2030) break;
+  uint32_t ms = millis();
+  while (udp.parsePacket()!= NTP_PACKET_SIZE) {
+    if (millis() - ms > 2000) break;
+    sendNTPrequest(ausTimeServerIP);
+    delay(500);
   }
-  return startSeconds;
+  startSeconds = getNTPreply();
+  if (startSeconds > year2017 && startSeconds < year2030) return startSeconds;
+
+  while (udp.parsePacket()!= NTP_PACKET_SIZE) {
+    if (millis() - ms > 4000) break;
+    sendNTPrequest(localTimeServerIP);
+    delay(500);
+  }
+  startSeconds = getNTPreply();
+  yield();
+  if (startSeconds > year2017 && startSeconds < year2030) {
+    setTime(startSeconds);
+    diagMess("local NTP time");
+    return startSeconds;
+}
+diagMess("no reply from NTP server");
+return 0;
 }
 
 // send an NTP request to the time server at the given address

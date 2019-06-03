@@ -21,5 +21,5 @@ void joinNet() {
 
   udp.begin(localPort);
   // Resolve servers
-  WiFi.hostByName(ntpServerName, timeServerIP);
+  WiFi.hostByName(ntpServerName, ausTimeServerIP);
 }

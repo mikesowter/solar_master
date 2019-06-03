@@ -44,7 +44,8 @@ File fh,fd,fe;
 Ticker secondTick;
 volatile int watchDog = 0;
 
-IPAddress localIP,timeServerIP,fileServerIP;
+IPAddress localIP,ausTimeServerIP;
+IPAddress localTimeServerIP(192, 168, 1, 10);
 IPAddress ip(192, 168, 1, 52);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
