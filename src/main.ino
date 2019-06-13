@@ -65,10 +65,16 @@ void ISRwatchDog () {
 		fe.close();
     ESP.restart();
   }
-	if (millis()-lastScan > 150000UL) {
+		if (millis()-lastScan > 150000UL) {
 		diagMess("Prometheus 2m scan fail");
 		// rejoin local network if necessary
 		if (WiFi.status() != WL_CONNECTED) joinNet();
+		else {
+    fd.close();
+		fe.close();
+    ESP.restart();
+		}
 	}
+
   interrupts();
 }
