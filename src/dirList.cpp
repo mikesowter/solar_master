@@ -1,7 +1,16 @@
-// add a web page with a listing of the SPIFFS "/" folder
+#include <fs.h>
+#include <ESP8266WebServer.h>
+#include "functions.h"
+
+extern char longStr[],fileSizeStr[],fileName[],userText[],charBuf[];
+extern FSInfo fs_info;
+extern ESP8266WebServer server;
+extern uint32_t fileSize;
+extern File fh;
+extern uint16_t longStrLen;
 
 void handleDir() {
-  htmlStr[0]='\0';
+  longStr[0]='\0';
   ltoa(fs_info.usedBytes,fileSizeStr,10);
   addCstring(ltoa(fs_info.usedBytes,fileSizeStr,10));
 	addCstring(" bytes used:\n");
@@ -14,8 +23,8 @@ void handleDir() {
     itoa(dir.fileSize(),fileSizeStr,10);
     addCstring(fileSizeStr);
   }
-  server.send ( 200, "text/plain", htmlStr );
-  //Serial.println(htmlStr);
+  server.send ( 200, "text/plain", longStr );
+  //Serial.println(longStr);
 }
 
 void listFile() {
@@ -28,15 +37,15 @@ void listFile() {
       break;
     }
   }
-  strcpy(htmlStr,"file: ");
+  strcpy(longStr,"file: ");
   addCstring(userText);
   addCstring(" size: ");
   addCstring(fileSizeStr);
   addCstring("\r\r");
   fh = SPIFFS.open(userText, "r");
 
-  if (fileSize > HTML_SIZE) {
-    fh.seek((HTML_SIZE-100),SeekEnd);
+  if (fileSize > longStrLen) {
+    fh.seek((longStrLen-100),SeekEnd);
   }
   while (fh.available()) {
     int k=fh.readBytesUntil('\r',charBuf,80);
@@ -45,11 +54,11 @@ void listFile() {
     yield();
   }
   fh.close();
-  server.send ( 200, "text/plain", htmlStr );
+  server.send ( 200, "text/plain", longStr );
 }
 
 void helpPage() {
-  htmlStr[0]='\0';
+  longStr[0]='\0';
   addCstring("Valid options include:");
   addCstring("\n");
   addCstring("8.3 filename");
@@ -72,6 +81,6 @@ void helpPage() {
   addCstring("\n");
   addCstring("week");
   addCstring("\n");
-  server.send ( 200, "text/plain", htmlStr );
-  //Serial.println(htmlStr);
+  server.send ( 200, "text/plain", longStr );
+  //Serial.println(longStr);
 }

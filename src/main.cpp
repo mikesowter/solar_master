@@ -1,9 +1,12 @@
+// a rebuild of solar master to develop better modularity and library functions
+
 #include "main.h"
+#include "functions.h"
 
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 2.3 20181011");
+	Serial.println("\n\rSolar Master Rev 3.0 20190615");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -78,3 +81,18 @@ void ISRwatchDog () {
 
   interrupts();
 }
+
+void watchWait(uint32_t timer) {
+  t0 = millis();
+  while (millis()-t0 < timer) {  // wait for timeout
+    if (t0>millis()) t0=millis(); // check for wrap around
+    yield();
+    //  check for web requests
+    server.handleClient();
+    // check for OTA
+    ArduinoOTA.handle();
+    // check for FTP request
+		ftpSrv.handleFTP();
+  }
+}
+

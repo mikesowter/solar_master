@@ -1,4 +1,18 @@
-byte readTotal() {
+#include <arduino.h>
+#include <fs.h>
+
+void diagMess(const char* mess);
+char* dateStamp();
+char* timeStamp();
+char* f8ds(float f);
+
+extern FSInfo fs_info;
+extern File fh;
+extern double pvEnergyTotal, thisTotal, thisEnergyToday, prevEnergyToday, sumEnergyToday;
+extern char charBuf[];
+extern bool dayStored;
+
+uint8_t readTotal() {
   pvEnergyTotal = 0.0;
   fh = SPIFFS.open("/TotalNRG.csv", "r");
   while (fh.available()>1) {
@@ -32,16 +46,16 @@ prevEnergyToday (previous scan reading)           reset at midnight
 sumEnergyToday  (accumulated max scan readings)   reset at midnight
 */
 
-byte updateTotal() {
+uint8_t updateTotal() {
   if (dayStored) return 1;
   fh = SPIFFS.open("/TotalNRG.csv", "a");
   if (!fh) return 0;
-  pvEnergyTotal += sumEnergyToday+thisEnergyToday;
+  pvEnergyTotal += sumEnergyToday + thisEnergyToday;
   strcpy(charBuf,dateStamp());
   strcat(charBuf,",");
   strcat(charBuf,timeStamp());
   strcat(charBuf,",");
-  strcat(charBuf,p8d(pvEnergyTotal));
+  strcat(charBuf,f8ds(pvEnergyTotal));
   fh.println(charBuf);
   fh.close();
   dayStored=true;

@@ -1,9 +1,23 @@
-/*-------- display code ----------*/
+#include <arduino.h>
+#include <fs.h>
+
+char* dateStamp();
+char* timeStamp();
+void printHex(uint8_t X);
+char* i2sh(uint8_t b);
+char* i2sd(uint8_t b);
+char* f8ds(float f);
+
+extern File fd,fe;
+
+char d2Str[] = "12";
+char d8Str[] = "12345.78";
 
 void diagMess(const char* mess) {
   fd.print(dateStamp());
   fd.print(" ");
   fd.print(timeStamp());
+  Serial.println(mess);
   fd.println(mess);
 }
 
@@ -16,6 +30,7 @@ void errMess(const char* mess) {
 
 char* dateStamp() {
   // digital display of the date
+  extern char dateStr[];
   strcpy(dateStr,i2sd(year()%100));
   strcat(dateStr,i2sd(month()));
   strcat(dateStr,i2sd(day()));
@@ -24,6 +39,7 @@ char* dateStamp() {
 
 char* timeStamp() {
   // digital display of the time
+  extern char timeStr[];
   strcpy(timeStr,i2sd(hour()));
   strcat(timeStr,":");
   strcat(timeStr,i2sd(minute()));
@@ -33,7 +49,7 @@ char* timeStamp() {
   return timeStr;
 }
 
-// print byte as 2 HEX digits, then a space
+// print uint8_t as 2 HEX digits, then a space
 void printHex(uint8_t X) {
   if (X<16) Serial.print("0");
   Serial.print(X,HEX);
@@ -52,22 +68,22 @@ char* i2sh(uint8_t b) {
 }
 
 // convert integer into a 2 Dec string dd
-char* i2sd(byte b) {
+char* i2sd(uint8_t b) {
   d2Str[0]=b/10+'0';
   d2Str[1]=b%10+'0';
   return d2Str;
 }
 
 // convert float into an 8 char string ddddd.dd
-char* p8d(float f) {
+char* f8ds(float f) {
   if (f > 99999.99) {
-    diagMess("p8d overflow");
+    diagMess("f8ds overflow");
     return (char*)"99999.99";
   }
   if (f < 0.0) f=-f;
   int w = (int)f;
   int d = 10000;
-  byte ptr = 0;
+  uint8_t ptr = 0;
   bool started = false;
   for ( int n=0;n<5;n++ ) {
     if ( w/d != 0 || n==4 ) started = true;

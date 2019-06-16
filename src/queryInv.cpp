@@ -1,3 +1,22 @@
+#include <arduino.h>
+#include "protocol.h"
+#include "functions.h"
+#include <ESP8266WiFi.h>
+#include <SoftwareSerial.h>
+
+extern float pvMinuteMax, pvMinuteMin, pvMinuteAvg, pvPower;
+extern float pvQtrMax, pvQtrMin, qtrEnergy, pvEnergyToday;
+uint8_t inStr[128], pvFault, prevFault;
+extern SoftwareSerial mySerial;	
+extern bool invReply,dayStored;
+extern uint32_t fileSize, pvHours;
+extern char charBuf[128];
+extern int16_t sampleCount;
+extern volatile int watchDog;
+
+double pvEnergyTotal,thisTotal,pvETLast,thisEnergyToday,prevEnergyToday,sumEnergyToday;
+float pvInvTemp, pvVolts1, pvVolts2, pvAmps1, pvAmps2, acVolts, acFrequency;
+
 void queryInv() {
   for (int j=0;j<8;j++) {
     mySerial.write(outStr4, 11);	// query inverter

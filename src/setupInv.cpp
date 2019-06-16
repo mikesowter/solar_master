@@ -1,3 +1,17 @@
+#include <arduino.h>
+#include "protocol.h"
+#include <SoftwareSerial.h>
+#include <fs.h>
+#include "functions.h"
+
+SoftwareSerial mySerial(5,4,false,128); 	// TX=D1=IO5, RX=D2=IO4 (Wemos mini)
+
+extern bool invReply, firstPass;  \
+extern volatile int watchDog;			
+extern char longStr[];	
+extern uint8_t inStr[];		
+extern File fd;					
+
 void setupInv() {
   ESP.wdtDisable();
   mySerial.begin(9600);
@@ -32,7 +46,7 @@ void setupInv() {
 
 void readBytes(bool HexOut) {
   int i = 0;
-  htmlStr[0]='\0';
+  longStr[0]='\0';
   while (mySerial.available()>0) {
     uint8_t X = mySerial.read();
     addCstring(i2sh(X));
@@ -40,6 +54,6 @@ void readBytes(bool HexOut) {
     inStr[i++] = X;
   }
   if ( i==0 || inStr[0]==0xFF ) return;
-  if (HexOut) diagMess(htmlStr);
+  if (HexOut) diagMess(longStr);
   fd.flush();
 }

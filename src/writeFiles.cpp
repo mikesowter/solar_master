@@ -1,4 +1,17 @@
-byte storeData() {
+#include <arduino.h>
+#include <fs.h>
+
+void diagMess(const char* mess);
+char* i2sd(uint8_t b);
+uint8_t openFile(const char* s);
+void WriteQtr();
+
+extern File fh;
+extern char charBuf[],fileName[],todayName[];
+extern float pvQtrMax,pvQtrMin,qtrEnergy,pvEnergyToday;
+extern double thisEnergyToday,sumEnergyToday;
+
+uint8_t storeData() {
   strcpy(fileName,todayName);
   if ( !openFile("a") ) return 0;
   WriteQtr();
@@ -8,7 +21,7 @@ byte storeData() {
 
 //----------------- open file for appending
 
-byte openFile(const char* s) {
+uint8_t openFile(const char* s) {
   fh = SPIFFS.open(fileName, s);
   if (!fh) {
     strcpy(charBuf,fileName);
@@ -28,7 +41,7 @@ void WriteQtr() {
   fh.print(",");
   fh.print(pvQtrMax);
   fh.print(",");
-  fh.println(sumEnergyToday+thisEnergyToday);
+  fh.println(sumEnergyToday + thisEnergyToday);
 //  fh.println(pvEnergyToday);
   yield();
 }

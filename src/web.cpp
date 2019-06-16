@@ -1,53 +1,68 @@
+#include <arduino.h>
+#include <fs.h>
+#include <ESP8266WebServer.h>
+#include "functions.h"
+
+extern float pvMinuteMax, pvMinuteMin, pvMinuteAvg, pvPower;
+extern float pvQtrMax, pvQtrMin, qtrEnergy, pvEnergyToday;
+extern float pvInvTemp, pvVolts1, pvVolts2, pvAmps1, pvAmps2, acVolts, acFrequency;
+extern double pvEnergyTotal,thisTotal,pvETLast,thisEnergyToday,prevEnergyToday,sumEnergyToday;
+extern char longStr[],fileSizeStr[],fileName[],userText[],charBuf[];
+extern ESP8266WebServer server;
+extern uint32_t fileSize, pvHours, lastScan;
+extern File fd, fe;
+extern uint16_t longStrLen;
+
 void handleMetrics() {
-  htmlStr[0]='\0';
+  longStr[0]='\0';
   addCstring("# TYPE pvInvTemp guage" );
   addCstring("\npvInvTemp ");
-  addCstring(p8d(pvInvTemp));
+  addCstring(f8ds(pvInvTemp));
   addCstring("\n# TYPE pvVolts1 guage" );
   addCstring("\npvVolts1 ");
-  addCstring(p8d(pvVolts1));
+  addCstring(f8ds(pvVolts1));
 //  addCstring("\n# TYPE pvVolts2 guage" );
 //  addCstring("\npvVolts2 ");
-//  addCstring(p8d(pvVolts2));
+//  addCstring(f8ds(pvVolts2));
   addCstring("\n# TYPE pvAmps1 guage" );
   addCstring("\npvAmps1 ");
-  addCstring(p8d(pvAmps1));
+  addCstring(f8ds(pvAmps1));
 //  addCstring("\n# TYPE pvAmps2 guage" );
 //  addCstring("\npvAmps2 ");
-//  addCstring(p8d(pvAmps2));
+//  addCstring(f8ds(pvAmps2));
   addCstring("\n# TYPE pvPower guage" );
   addCstring("\npvPower ");
-  addCstring(p8d(pvPower));
+  addCstring(f8ds(pvPower));
   addCstring("\n# TYPE pvMinuteMin guage" );
   addCstring("\npvMinuteMin ");
-  addCstring(p8d(pvMinuteMin));
+  addCstring(f8ds(pvMinuteMin));
   addCstring("\n# TYPE pvMinuteAvg guage" );
   addCstring("\npvMinuteAvg ");
-  addCstring(p8d(pvMinuteAvg));
+  addCstring(f8ds(pvMinuteAvg));
   addCstring("\n# TYPE pvMinuteMax guage" );
   addCstring("\npvMinuteMax ");
-  addCstring(p8d(pvMinuteMax));
+  addCstring(f8ds(pvMinuteMax));
   addCstring("\n# TYPE pvEnergyToday guage" );
   addCstring("\npvEnergyToday ");
-  addCstring(p8d(sumEnergyToday+thisEnergyToday));
-//  addCstring(p8d(pvEnergyToday));
+  addCstring(f8ds(sumEnergyToday+thisEnergyToday));
+//  addCstring(f8ds(pvEnergyToday));
   addCstring("\n# TYPE pvEnergyTotal guage" );
   addCstring("\npvEnergyTotal ");
-  addCstring(p8d(pvEnergyTotal));
+  addCstring(f8ds(pvEnergyTotal));
   addCstring("\n# TYPE pvHours guage" );
   addCstring("\npvHours ");
-  addCstring(p8d((float)pvHours));
+  addCstring(f8ds((float)pvHours));
   addCstring("\n# TYPE acVolts guage" );
   addCstring("\nacVolts ");
-  addCstring(p8d(acVolts));
+  addCstring(f8ds(acVolts));
   addCstring("\n# TYPE acFrequency guage" );
   addCstring("\nacFrequency ");
-  addCstring(p8d(acFrequency));
+  addCstring(f8ds(acFrequency));
   addCstring("\n# TYPE pvWifiSignal guage" );
   addCstring("\npvWifiSignal ");
-  addCstring(p8d(-WiFi.RSSI()));
+  addCstring(f8ds(-WiFi.RSSI()));
   addCstring( "\n" );
-  server.send ( 200, "text/plain", htmlStr );
+  server.send ( 200, "text/plain", longStr );
   lastScan = millis();
 }
 
@@ -86,20 +101,20 @@ void handleNotFound() {
 }
 
 void addCstring(const char* s) {
-  // find end of htmlStr
+  // find end of longStr
   uint16_t p;
-  for (p=0;p<HTML_SIZE;p++) {
-    if ( p>HTML_SIZE-32) {
-      diagMess("HTML_SIZE exceeded");
+  for (p=0;p<longStrLen;p++) {
+    if ( p>longStrLen-32) {
+      diagMess("longStrLen exceeded");
       break;
     }
-    if (htmlStr[p]=='\0') {
+    if (longStr[p]=='\0') {
       break;    // p now points to end of old string
     }
   }
   uint16_t q=0;
-  for (;p<HTML_SIZE;p++) {
-    htmlStr[p]=s[q];
+  for (;p<longStrLen;p++) {
+    longStr[p]=s[q];
     if (s[q++]=='\0') break;
   }
 }

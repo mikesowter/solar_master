@@ -45,7 +45,7 @@ public:
    bool overflow();
    int peek();
 
-   virtual size_t write(uint8_t byte);
+   virtual size_t write(uint8_t uint8_t);
    virtual int read();
    virtual int available();
    virtual void flush();

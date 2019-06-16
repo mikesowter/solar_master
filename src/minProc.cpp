@@ -1,3 +1,14 @@
+#include <fs.h>
+
+uint8_t storeData();
+
+float pvMinuteMax, pvMinuteMin, pvMinuteAvg, pvPower;
+float pvQtrMax,pvQtrMin,qtrEnergy,pvEnergyToday;
+extern uint8_t oldMin,oldQtr,oldHour,oldDay,oldMonth;
+extern int16_t sampleCount;
+extern float pvMax, pvMin, pvSum;
+extern File fd,fe;
+
 void minProc() {
 	if (sampleCount < 10) return;
   oldMin = minute();
