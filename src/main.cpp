@@ -1,4 +1,4 @@
-// a rebuild of solar master to develop better modularity and library functions
+// a rebuild of solar master with better modularity
 
 #include "main.h"
 #include "functions.h"
@@ -6,7 +6,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 3.0 20190615");
+	Serial.println("\n\rSolar Master Rev 3.0 20190616");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
