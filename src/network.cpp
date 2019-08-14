@@ -45,6 +45,7 @@ void joinNet() {
   udp.begin(localPort);
   // Resolve servers
   WiFi.hostByName(ntpServerName, ausTimeServerIP);
+  yield();
 }
 
 unsigned long getTime() {

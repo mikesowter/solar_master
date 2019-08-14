@@ -13,9 +13,10 @@ extern uint8_t inStr[];
 extern File fd;					
 
 void setupInv() {
+  ESP.wdtDisable();
   mySerial.begin(9600);
   while ( !invReply ) {
-    yield();
+    ESP.wdtFeed();
     mySerial.write(outStr1,11);
     watchWait(100);
     mySerial.write(outStr2,11);
@@ -28,6 +29,8 @@ void setupInv() {
     if ( mySerial.available() == 12 ) {
       readBytes(false);               // read acknowledgement
       if (goodCheckSum(10)) {
+        dayCheck();
+        ESP.wdtEnable(5000UL);
         invReply = true;
         firstPass = true;             // necessary for first min/max processing
         return;
@@ -35,7 +38,6 @@ void setupInv() {
     }
     while ( mySerial.available() ) {   // flush buffer
       mySerial.read();
-      dayCheck();
       yield();
     }
     dayCheck();

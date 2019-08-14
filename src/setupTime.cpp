@@ -29,6 +29,7 @@ void setupTime() {
   strcpy(todayName,"/pv");
   strcat(todayName,dateStamp());
   strcat(todayName,".csv");
+  yield();
 }
 
 void dayCheck() {

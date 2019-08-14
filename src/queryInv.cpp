@@ -10,7 +10,7 @@ uint8_t inStr[128], pvFault, prevFault;
 extern SoftwareSerial mySerial;	
 extern bool invReply,dayStored;
 extern uint32_t fileSize, pvHours;
-extern char charBuf[128];
+extern char charBuf[];
 extern int16_t sampleCount;
 extern volatile int watchDog;
 
@@ -18,13 +18,13 @@ double pvEnergyTotal,thisTotal,pvETLast,thisEnergyToday,prevEnergyToday,sumEnerg
 float pvInvTemp, pvVolts1, pvVolts2, pvAmps1, pvAmps2, acVolts, acFrequency;
 
 void queryInv() {
-  for (int j=0;j<8;j++) {
+  for (int j=0; j<8; j++) {
     mySerial.write(outStr4, 11);	// query inverter
     watchWait(1000);
 
-	  if (mySerial.available()==53) {
+	  if ( mySerial.available() == 53 ) {
       readBytes(false);
-      if (goodCheckSum(51)) {
+      if ( goodCheckSum(51) ) {
         invReply = true;
     		pvInvTemp = (256 * inStr[7] + inStr[8]) / 10.0;
   //      pvEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
@@ -45,7 +45,7 @@ void queryInv() {
           errMess(charBuf);
           prevFault = pvFault;
         }
-        else prevFault = 1;
+        if ( pvFault == 1 ) prevFault = 1;
       }
       sampleCount++;
       return;

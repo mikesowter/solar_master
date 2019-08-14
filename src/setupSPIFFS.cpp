@@ -17,4 +17,5 @@ void setupSPIFFS () {
 
   fd = SPIFFS.open("/diags.txt","a");
   fe = SPIFFS.open("/errmess.txt","a");
+  yield();
 }

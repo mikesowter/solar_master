@@ -13,6 +13,8 @@ extern uint32_t fileSize, pvHours, lastScan;
 extern File fd, fe;
 extern uint16_t longStrLen;
 
+uint8_t storeData();
+
 void handleMetrics() {
   longStr[0]='\0';
   addCstring("# TYPE pvInvTemp guage" );
@@ -91,6 +93,14 @@ void handleNotFound() {
     fe.println(dateStamp());
     strcpy(charBuf,"<!DOCTYPE html><html><head><HR>Error Messages deleted<HR></head></html>");
     server.send ( 200, "text/html", charBuf );
+  }
+  else if (strncmp(userText,"/reset",5)==0) {
+    fd.close();
+    fe.close();
+    strcpy(charBuf,"<!DOCTYPE html><html><head><HR>Reset requested<HR></head></html>");
+    server.send ( 200, "text/html", charBuf );
+    storeData();
+    ESP.restart();
   }
   else {
     Serial.print(timeStamp());

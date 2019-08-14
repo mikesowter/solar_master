@@ -17,4 +17,5 @@ void setupServer() {
   if ( MDNS.begin ( "trial" ) ) {
     Serial.print("mDNS responder started: http://trial.local");
   }
+  yield();
 }

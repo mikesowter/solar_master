@@ -13,7 +13,8 @@ extern "C" {
 #include "user_interface.h"
 }
 
-String resetReason = ESP.getResetReason();
+String resetReason = "Restart cause: " + ESP.getResetReason();
+String resetDetail = ESP.getResetInfo();
 
 ESP8266WebServer server ( 80 );
 FtpServer ftpSrv;
@@ -41,6 +42,6 @@ float pvMax = 0.0, pvMin = 0.0, pvSum = 0.0;
 extern float pvPower;
 
 uint8_t oldMin, oldQtr, oldHour, oldDay, oldMonth;
-int16_t sampleCount=0;
+int16_t sampleCount = 0;
 uint32_t fileSize, pvHours, secsSinceRestart;
 uint32_t t0, t1, minMillis, startMillis, lastScan;

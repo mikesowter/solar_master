@@ -6,7 +6,7 @@
 void setup()
 {
 	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 3.0 20190616");
+	Serial.println("\n\rSolar Master Rev 3.1 20190813");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -24,6 +24,8 @@ void setup()
 	// lookup reason for restart
 	resetReason.toCharArray(charBuf,resetReason.length()+1);
 	diagMess(charBuf);       // restart message
+	resetDetail.toCharArray(charBuf,resetDetail.length()+1);
+	if ( charBuf[16] != '0' )	diagMess(charBuf);       		
 	// read yesterday's TotalEnergy
 	if (!readTotal()) diagMess("readTotal failed");
 }
@@ -31,25 +33,25 @@ void setup()
 void loop()
 {
 	// check inverter comms
-	if ( invReply==false ) setupInv();
+	if ( !invReply ) setupInv();
 	// query inverter and wait for response
 	queryInv();
 	// check for end of solar day
 	if ( invReply || !dayStored ) {
-		// check for change of minute
-		if ( oldMin==minute() || firstPass )
-		{
-			if (pvPower > pvMax) pvMax = pvPower;
-			if (pvPower < pvMin) pvMin = pvPower;
+		// check for first pass
+		if ( firstPass ) {
+			pvMax = pvPower;
+			pvMin = pvPower;
 			pvSum += pvPower;
-			if (firstPass) {
-				pvMin = pvPower;
-				firstPass = false;
-			}
+			firstPass = false;
 		}
-		else minProc();
+		if ( pvPower > pvMax ) pvMax = pvPower;
+		if ( pvPower < pvMin ) pvMin = pvPower;
+		pvSum += pvPower;
+		// check for change of minute
+		if ( minute() != oldMin ) minProc();
 		// reset watchdog
-		watchDog=0;
+		watchDog = 0;
 		// check for OTA
 	  ArduinoOTA.handle();
 		// check for web request
