@@ -18,7 +18,7 @@ double pvEnergyTotal,thisTotal,pvETLast,thisEnergyToday,prevEnergyToday,sumEnerg
 float pvInvTemp, pvVolts1, pvVolts2, pvAmps1, pvAmps2, acVolts, acFrequency;
 
 void queryInv() {
-  for (int j=0; j<8; j++) {
+  for (int j=0; j<8; j++) {       // 8 attempts to connect??
     mySerial.write(outStr4, 11);	// query inverter
     watchWait(1000);
 
@@ -68,7 +68,7 @@ void queryInv() {
       mySerial.read();
       yield();
     }
-  }
+  } // 8 attempts failed
   invReply = false;
   diagMess("no reply");
   if ( hour()>=16 && !dayStored ) {

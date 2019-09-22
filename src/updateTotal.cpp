@@ -58,6 +58,6 @@ uint8_t updateTotal() {
   strcat(charBuf,f8ds(pvEnergyTotal));
   fh.println(charBuf);
   fh.close();
-  dayStored=true;
+  dayStored = true;
   return 1;
 }
