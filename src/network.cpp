@@ -9,7 +9,7 @@ unsigned long getNTPreply();
 void diagMess(const char* mess);
 
 IPAddress localIP,ausTimeServerIP;
-IPAddress localTimeServerIP(192, 168, 1, 10);
+IPAddress localTimeServerIP(192, 168, 1, 6);
 IPAddress ip(192, 168, 1, 52);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
@@ -67,7 +67,7 @@ unsigned long getTime() {
   if (startSeconds > year2017 && startSeconds < year2030) return startSeconds;
 
   while (udp.parsePacket()!= NTP_PACKET_SIZE) {
-    if (millis() - ms > 5000) {
+    if (millis() - ms > 1000) {
       diagMess("no reply from local NTP server");
       break;
     }
@@ -81,6 +81,7 @@ unsigned long getTime() {
     diagMess("local NTP time");
     return startSeconds;
   }
+  else diagMess("NTP time invalid");
 return 0;
 }
 

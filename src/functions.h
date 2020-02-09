@@ -50,3 +50,4 @@ void setupSPIFFS ();
 uint8_t storeData();
 uint8_t openFile(const char* s);
 void WriteQtr();
+void checkScan();

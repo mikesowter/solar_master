@@ -58,30 +58,27 @@ void loop()
 		server.handleClient();
 		// check for FTP request
 		ftpSrv.handleFTP();
+    // check prometheus scan
+    void checkScan();
 	}
 }
 
 void ISRwatchDog () {
-  noInterrupts();
   watchDog++;
-  if (watchDog >= 120) {
-    errMess("watchDog 120s");
+  if (watchDog >= 60) {
+    errMess("watchDog 60s");
     fd.close();
 		fe.close();
     ESP.restart();
   }
-		if (millis()-lastScan > 150000UL) {
-		diagMess("Prometheus 2m scan fail");
-		// rejoin local network if necessary
-		if (WiFi.status() != WL_CONNECTED) joinNet();
-		else {
-    fd.close();
-		fe.close();
-    ESP.restart();
-		}
-	}
+}
 
-  interrupts();
+void checkScan() {
+  if (  millis()-lastScan > 150000UL) {
+    diagMess("Prometheus 2m scan fail");
+    // rejoin local network if necessary
+    if (WiFi.status() != WL_CONNECTED) joinNet();
+  }
 }
 
 void watchWait(uint32_t timer) {
