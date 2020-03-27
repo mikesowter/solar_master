@@ -4,7 +4,7 @@
 #include <fs.h>
 #include "functions.h"
 
-SoftwareSerial mySerial(5,4,false,128); 	// TX=D1=IO5, RX=D2=IO4 (Wemos mini)
+SoftwareSerial mySerial(5,4,false); 	// TX=D1=IO5, RX=D2=IO4 (Wemos mini)
 
 extern bool invReply, firstPass;  
 extern volatile int watchDog;			
@@ -25,10 +25,9 @@ void setupInv() {
     watchWait(1000);
     mySerial.write(outStr3,28);       // assign address
     watchWait(1000);
-
-    if ( mySerial.available() == 12 ) {
-      readBytes(false);               // read acknowledgement
-      if (goodCheckSum(10)) {
+    if ( mySerial.available() == 11 ) {
+      readBytes(true);               // read acknowledgement
+      if ( goodCheckSum(11) ) {
         dayCheck();
         ESP.wdtEnable(5000UL);
         invReply = true;

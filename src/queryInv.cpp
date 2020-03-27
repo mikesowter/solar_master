@@ -1,4 +1,5 @@
 #include <arduino.h>
+#include <TimeLib.h>
 #include "protocol.h"
 #include "functions.h"
 #include <ESP8266WiFi.h>
@@ -21,10 +22,9 @@ void queryInv() {
   for (int j=0; j<8; j++) {       // 8 attempts to connect??
     mySerial.write(outStr4, 11);	// query inverter
     watchWait(1000);
-
-	  if ( mySerial.available() == 53 ) {
-      readBytes(false);
-      if ( goodCheckSum(51) ) {
+	  if ( mySerial.available() == 52 ) {
+      readBytes( false );
+      if ( goodCheckSum(52) ) {
         invReply = true;
     		pvInvTemp = (256 * inStr[7] + inStr[8]) / 10.0;
   //      pvEnergyToday = (256 * inStr[9] + inStr[10]) / 100.0;
@@ -85,8 +85,8 @@ void queryInv() {
 
 bool goodCheckSum(uint8_t len) {
   uint16_t sum = 0;
-  for (int i=0;i<len-2;i++) sum += inStr[i];
-  sum += inStr[len-2]*256;
-  sum += inStr[len-1];
+  for (int i=0;i<len-3;i++) sum += inStr[i];
+  sum += inStr[len-3]*256;  // 2 checksum bytes
+  sum += inStr[len-2];      // followed by 0A,0D
   return sum == 0;
 }

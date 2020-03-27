@@ -1,5 +1,6 @@
 #include <arduino.h>
 #include <fs.h>
+#include <TimeLib.h>
 
 void diagMess(const char* mess);
 char* i2sd(uint8_t b);
