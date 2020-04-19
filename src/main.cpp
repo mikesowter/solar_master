@@ -5,8 +5,8 @@
 
 void setup()
 {
-	Serial.begin(115200);
-	Serial.println("\n\rSolar Master Rev 3.1 20190813");
+	Serial.begin(57600);
+	Serial.println("\n\rSolar Master Rev 3.2 20200401");
 	// join local network and internet
 	joinNet();
 	// setup over the air updates
@@ -27,7 +27,7 @@ void setup()
 	resetDetail.toCharArray(charBuf,resetDetail.length()+1);
 	if ( charBuf[16] != '0' )	diagMess(charBuf);       		
 	// read yesterday's TotalEnergy
-	if (!readTotal()) diagMess("readTotal failed");
+	readTotal();
 }
 
 void loop()
@@ -35,11 +35,12 @@ void loop()
 	// check inverter comms
 	if ( !invReply ) setupInv();
 	// query inverter and wait for response
-	queryInv();
+	if ( invReply ) queryInv();
 	// check for end of solar day
 	if ( invReply || !dayStored ) {
 		// check for first pass
 		if ( firstPass ) {
+      Serial.println("\nfirstPass\n");
 			pvMax = pvPower;
 			pvMin = pvPower;
 			pvSum += pvPower;
@@ -59,7 +60,7 @@ void loop()
 		// check for FTP request
 		ftpSrv.handleFTP();
     // check prometheus scan
-    void checkScan();
+    checkScan();
 	}
 }
 
@@ -77,14 +78,18 @@ void checkScan() {
   if (  millis()-lastScan > 150000UL) {
     diagMess("Prometheus 2m scan fail");
     // rejoin local network if necessary
-    if (WiFi.status() != WL_CONNECTED) joinNet();
+    if (WiFi.status() != WL_CONNECTED) {
+      diagMess("\nrejoining network\n");
+      joinNet();
+    }
   }
 }
 
 void watchWait(uint32_t timer) {
   t0 = millis();
-  while (millis()-t0 < timer) {  // wait for timeout
-    if (t0 > millis()) t0 = millis(); // check for wrap around
+  Serial.print("*");
+  while (millis()-t0 < timer) {   // wait for timeout
+    if (t0 > millis()) t0 = 0;    // check for wrap around
     yield();
     //  check for web requests
     server.handleClient();

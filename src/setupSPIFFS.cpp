@@ -5,9 +5,12 @@ extern File fd,fe;
 
 void setupSPIFFS () {
 
-//   if(!SPIFFS.format()) Serial.println("SPIFFS.format failed");
+//  if(!SPIFFS.format()) Serial.println("SPIFFS.format failed");
 
-  if(!SPIFFS.begin()) Serial.println("SPIFFS.begin failed");
+  if(!SPIFFS.begin()) {
+    Serial.println("SPIFFS.begin failed");
+    if(!SPIFFS.format()) Serial.println("SPIFFS.format failed");
+  }
  
   SPIFFS.info(fs_info);
   Serial.print(fs_info.totalBytes);

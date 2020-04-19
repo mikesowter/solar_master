@@ -12,16 +12,20 @@ extern double pvEnergyTotal, thisTotal, thisEnergyToday, prevEnergyToday, sumEne
 extern char charBuf[];
 extern bool dayStored;
 
-uint8_t readTotal() {
+bool readTotal() {
   pvEnergyTotal = 0.0;
   fh = SPIFFS.open("/TotalNRG.csv", "r");
+  if (!fh) {
+    diagMess("/TotalNRG.csv failed to open");
+    return false;
+  }
   while (fh.available()>1) {
     // first check there isn't already an entry for today
     fh.readBytes(charBuf,6);
     charBuf[6] = '\0';
     if ( strncmp(dateStamp(),charBuf,6)==0 ) {
       diagMess("days Total_kWh already exists");
-      return 1;
+      return true;
     }
     // otherwise choose the largest
     fh.readBytes(charBuf,9);
@@ -33,11 +37,12 @@ uint8_t readTotal() {
     }
   }
   fh.close();
-  return 1;
+  Serial.printf("\nTotal Energy: %f\n",pvEnergyTotal);
+  return true;
 }
 
 /* To correctly track today's total energy:
-1. Assume that the inverter has outages, so pvEnergyToday drops to 0 each time
+1. Assume that the inverter has solar outages, so pvEnergyToday drops to 0
 2. Assume that the interface does not have concurrent outages
 
 we need 3 variables:
@@ -46,10 +51,10 @@ prevEnergyToday (previous scan reading)           reset at midnight
 sumEnergyToday  (accumulated max scan readings)   reset at midnight
 */
 
-uint8_t updateTotal() {
+bool updateTotal() {
   if (dayStored) return 1;
   fh = SPIFFS.open("/TotalNRG.csv", "a");
-  if (!fh) return 0;
+  if (!fh) return false;
   pvEnergyTotal += sumEnergyToday + thisEnergyToday;
   strcpy(charBuf,dateStamp());
   strcat(charBuf,",");
@@ -59,5 +64,5 @@ uint8_t updateTotal() {
   fh.println(charBuf);
   fh.close();
   dayStored = true;
-  return 1;
+  return true;
 }

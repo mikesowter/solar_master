@@ -31,8 +31,8 @@ void readBytes(bool HexOut);
 void addCstring(const char* s);
 bool goodCheckSum(uint8_t len);
 // updateTotal
-uint8_t readTotal();
-uint8_t updateTotal();
+bool readTotal();
+bool updateTotal();
 // dirList
 void handleDir();
 void listFile();

@@ -12,11 +12,13 @@ extern char longStr[];
 extern uint8_t inStr[];		
 extern File fd;					
 
+uint32_t timer;
+
 void setupInv() {
-  ESP.wdtDisable();
   mySerial.begin(9600);
+  timer = millis();
   while ( !invReply ) {
-    ESP.wdtFeed();
+    Serial.print("SU ");
     mySerial.write(outStr1,11);
     watchWait(100);
     mySerial.write(outStr2,11);
@@ -29,7 +31,6 @@ void setupInv() {
       readBytes(true);               // read acknowledgement
       if ( goodCheckSum(11) ) {
         dayCheck();
-        ESP.wdtEnable(5000UL);
         invReply = true;
         firstPass = true;             // necessary for first min/max processing
         return;
@@ -41,6 +42,10 @@ void setupInv() {
     }
     dayCheck();
     watchDog = 0;
+    if ( millis()-timer > 2000 ) {
+      Serial.printf(" inverter setup timeout\n");
+      break;
+    }
   }
 }
 
