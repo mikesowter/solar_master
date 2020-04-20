@@ -33,7 +33,7 @@ void setup()
 void loop()
 {
 	// check inverter comms
-	if ( !invReply ) setupInv();
+	if ( !invReply ) setupInv();    // timeout after 2 secs
 	// query inverter and wait for response
 	if ( invReply ) queryInv();
 	// check for end of solar day
@@ -53,13 +53,9 @@ void loop()
 		if ( minute() != oldMin ) minProc();
 		// reset watchdog
 		watchDog = 0;
-		// check for OTA
-	  ArduinoOTA.handle();
-		// check for web request
-		server.handleClient();
-		// check for FTP request
-		ftpSrv.handleFTP();
-    // check prometheus scan
+    // check background
+		watchWait(5000);
+    // check prometheus
     checkScan();
 	}
 }
@@ -75,12 +71,13 @@ void ISRwatchDog () {
 }
 
 void checkScan() {
-  if (  millis()-lastScan > 150000UL) {
-    diagMess("Prometheus 2m scan fail");
+  if (  millis()-lastScan > 200000UL ) {
+    diagMess("Prometheus 3m scan fail");
     // rejoin local network if necessary
     if (WiFi.status() != WL_CONNECTED) {
       diagMess("\nrejoining network\n");
       joinNet();
+      setupTime();
     }
   }
 }
