@@ -24,11 +24,11 @@ void setupInv() {
     mySerial.write(outStr2,11);
     watchWait(100);
     readBytes(false);                 // read serial number
-    watchWait(1000);
+    watchWait(500);
     mySerial.write(outStr3,28);       // assign address
-    watchWait(1000);
+    watchWait(500);
     if ( mySerial.available() == 11 ) {
-      readBytes(true);               // read acknowledgement
+      readBytes(false);               // read acknowledgement
       if ( goodCheckSum(11) ) {
         dayCheck();
         invReply = true;

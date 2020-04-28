@@ -21,7 +21,7 @@ float pvInvTemp, pvVolts1, pvVolts2, pvAmps1, pvAmps2, acVolts, acFrequency;
 void queryInv() {
   for (int j=0; j<8; j++) {       // 8 attempts to connect
     mySerial.write(outStr4, 11);	// query inverter
-    watchWait(1000);
+    watchWait(500);
 	  if ( mySerial.available() == 52 ) {
       readBytes( false );
       if ( goodCheckSum(52) ) {
@@ -68,8 +68,10 @@ void queryInv() {
       mySerial.read();
       yield();
     }
-    sprintf(charBuf,"scan attempt %d failed",j);
-    diagMess(charBuf);
+    if (j < 2) {
+      sprintf(charBuf,"scan attempt %d failed",j);
+      diagMess(charBuf);
+    }
   } // 8 attempts failed
   invReply = false;
   diagMess("no reply");

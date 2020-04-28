@@ -32,7 +32,7 @@ void joinNet() {
   WiFi.config(ip, gateway, subnet, dns);
   WiFi.begin(ssid, pass);
 
-  while (WiFi.status() != WL_CONNECTED) delay(1);
+  while (WiFi.status() != WL_CONNECTED) delay(100);
  
   Serial.println("");
   Serial.println("local IP address: ");
